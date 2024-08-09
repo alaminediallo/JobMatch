@@ -22,7 +22,7 @@
     <script src="{{ asset('js/plugins/datatables-buttons/buttons.html5.min.js') }}"></script>
 
     <!-- Page JS Code -->
-    @vite(['resources/js/pages/datatables.js'])
+    <script src="{{ asset('js/pages/be_tables_datatables.min.js') }}"></script>
 @endsection
 
 @section('content')
