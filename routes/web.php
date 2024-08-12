@@ -3,22 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-//Route::view('/', 'landing');
-//Route::match(['get', 'post'], '/dashboard', function(){
-//    return view('dashboard');
-//});
+Route::redirect('/', '/home');
 
-//Route::middleware('auth')->group(function () {
-//    Route::view('/pages/slick', 'pages.slick');
-//    Route::view('/pages/datatables', 'pages.datatables');
-//    Route::view('/pages/blank', 'pages.blank');
-//});
-
-Route::redirect('/', '/dashboard');
-
-Route::get('/dashboard', static function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home', static function () {
+    return view('pages.home');
+})->middleware(['auth', 'verified'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -26,4 +15,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

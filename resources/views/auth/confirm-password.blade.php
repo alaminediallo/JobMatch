@@ -11,7 +11,7 @@
                         class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
                         <!-- Header -->
                         <div class="mb-2 text-center">
-                            <a class="link-fx fw-bold fs-1" href="{{ route('dashboard')}}">
+                            <a class="link-fx fw-bold fs-1" href="{{ route('home')}}">
                                 <span class="text-dark">Job</span><span class="text-primary">Match</span>
                             </a>
                             <p class="fs-sm text-muted">

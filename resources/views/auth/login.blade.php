@@ -16,7 +16,7 @@
                         class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
                         <!-- Header -->
                         <div class="mb-2 text-center">
-                            <a class="link-fx fw-bold fs-1" href="{{ route('dashboard')}}">
+                            <a class="link-fx fw-bold fs-1" href="{{ route('home')}}">
                                 <span class="text-dark">Job</span><span class="text-primary">Match</span>
                             </a>
                             <p class="text-uppercase fw-bold fs-sm text-muted">Connexion</p>
@@ -24,7 +24,7 @@
                         <!-- END Header -->
 
                         <!-- Sign In Form -->
-                        <x-auth-session-status class="mb-4" :status="session('status')" />
+                        <x-auth-session-status class="mb-4" :status="session('status')"/>
 
                         <form class="js-validation-signin" method="POST" action="{{route('login')}}">
                             @csrf
@@ -36,9 +36,9 @@
                                            placeholder="Email" value="{{ old('email') }}">
                                     <span class="input-group-text"><i class="fa fa-user-circle"></i></span>
                                 </div>
-                                    @error('email')
-                                    <div class="text-danger mt-1 fs-sm">{{ $message }}</div>
-                                    @enderror
+                                @error('email')
+                                <div class="text-danger mt-1 fs-sm">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="mb-4">
                                 <div class="input-group input-group-lg">
