@@ -1,21 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 return [
-
-    /*
-    |--------------------------------------------------------------------------
-    | Lignes de Langue pour l'Authentification
-    |--------------------------------------------------------------------------
-    |
-    | Les lignes de langage suivantes sont utilisées lors de l'authentification
-    | pour divers messages que nous devons afficher à l'utilisateur. Vous êtes
-    | libre de modifier ces lignes selon les besoins de votre application.
-    |
-    */
-
     'failed' => 'Ces identifiants ne correspondent pas à nos enregistrements.',
-    'password' => 'Le mot de passe fourni est incorrect.',
-    'throttle' => 'Trop de tentatives de connexion. Veuillez réessayer dans :seconds secondes.',
-
-
+    'password' => 'Le mot de passe est incorrect',
+    'throttle' => 'Tentatives de connexion trop nombreuses. Veuillez essayer de nouveau dans :seconds secondes.',
 ];
