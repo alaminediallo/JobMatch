@@ -72,7 +72,7 @@
                             </div>
 
                             <div class="text-center mb-4">
-                                <button type="submit" class="btn btn-hero btn-primary">
+                                <button type="submit" class="btn w-100 btn-hero btn-primary">
                                     <i class="fa fa-fw fa-plus opacity-50 me-1"></i> S'inscrire
                                 </button>
                             </div>

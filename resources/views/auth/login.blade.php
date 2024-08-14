@@ -13,7 +13,7 @@
                 <!-- Sign In Block -->
                 <div class="block block-transparent block-rounded w-100 mb-0 overflow-hidden">
                     <div
-                        class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
+                        class="block-content block-content-full px-lg-5 px-xl-5 py-4 py-md-5 py-lg-6 bg-body-extra-light">
                         <!-- Header -->
                         <div class="mb-2 text-center">
                             <a class="link-fx fw-bold fs-1" href="{{ route('home')}}">
@@ -54,18 +54,26 @@
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="login-remember-me"
                                            name="remember" @checked(old('remember'))>
-                                    <label class="form-check-label" for="login-remember-me">Souvenez-vous de moi</label>
-                                </div>
-                                <div class="fw-semibold fs-sm py-1">
-                                    @if (Route::has('password.request'))
-                                        <a href="{{ route('password.request') }}">Mot de pass oublié?</a>
-                                    @endif
+                                    <label class="form-check-label" for="login-remember-me">Se souvenir de moi</label>
                                 </div>
                             </div>
                             <div class="text-center mb-4">
-                                <button type="submit" class="btn btn-hero btn-primary">
+                                <button type="submit" class="btn w-100 btn-lg btn-hero btn-primary mb-2">
                                     <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> Se connecter
                                 </button>
+                                <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between">
+                                    @if (Route::has('password.request'))
+                                        <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1"
+                                           href="{{ route('password.request') }} ">
+                                            <i class="fa fa-exclamation-triangle opacity-50 me-1"></i> Mot de passe
+                                            oublié ?
+                                        </a>
+                                    @endif
+                                    <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1"
+                                       href="{{ route('register') }}">
+                                        <i class="fa fa-plus opacity-50 me-1"></i> {{__('New Account')}}
+                                    </a>
+                                </p>
                             </div>
                         </form>
                         <!-- END Sign In Form -->
