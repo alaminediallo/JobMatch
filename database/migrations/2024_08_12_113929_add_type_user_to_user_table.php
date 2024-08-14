@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,12 +15,14 @@ return new class extends Migration
                 $table->string('prenom')->nullable();
             });
 
-            $table->after('password', function () use ($table) {
+            $table->after('email', function () use ($table) {
                 $table->enum('type_user', ['Candidat', 'Administrateur', 'Entreprise']);
+            });
+
+            $table->after('password', function () use ($table) {
                 $table->string('adresse')->nullable();
                 $table->string('nom_entreprise')->nullable();  // Specific to Entreprise
                 $table->text('description_entreprise')->nullable();  // Specific to Entreprise
-                $table->string('localisation')->nullable();  // Specific to Entreprise
             });
         });
     }
