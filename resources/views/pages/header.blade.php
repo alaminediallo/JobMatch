@@ -24,12 +24,14 @@
         <div class="space-x-1">
             <!-- User Dropdown -->
             <div class="dropdown d-inline-block">
-                <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-fw fa-user d-sm-none"></i>
-                    <span class="d-none d-sm-inline-block">{{ Auth::user()->name }}</span>
-                    <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
-                </button>
+                @auth
+                    <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-fw fa-user d-sm-none"></i>
+                        <span class="d-none d-sm-inline-block">{{ Auth::user()->name }}</span>
+                        <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
+                    </button>
+                @endauth
                 <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
                     {{-- <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
                          User Options
