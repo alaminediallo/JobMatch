@@ -18,7 +18,8 @@
 
     <!-- Stylesheets -->
     <!-- Dashmix framework -->
-    <link rel="stylesheet" id="css-main" href="{{ asset('css/dashmix.css') }}">
+    <link rel="stylesheet" id="css-main" href="{{ asset('css/dashmix.min.css') }}">
+    <link rel="stylesheet" id="css-main" href="{{ asset('css/style.css') }}">
 
     <!-- Modules -->
     @yield('css')
