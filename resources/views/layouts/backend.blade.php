@@ -16,11 +16,13 @@
     <link rel="icon" sizes="192x192" type="image/png" href="{{ asset('media/favicons/favicon-192x192.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('media/favicons/apple-touch-icon-180x180.png') }}">
 
-    <!-- Stylesheets -->
-    <!-- Dashmix framework -->
-    <link rel="stylesheet" id="css-main" href="{{ asset('css/dashmix.css') }}">
     <!-- Modules -->
     @yield('css-plugins')
+
+    <!-- Stylesheets -->
+    <!-- Dashmix framework -->
+    <link rel="stylesheet" id="css-main" href="{{ asset('css/dashmix.min.css') }}">
+    <link rel="stylesheet" id="css-main" href="{{ asset('css/style.css') }}">
 </head>
 
 <body>
@@ -74,7 +76,7 @@
     'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
 -->
 <div id="page-container" class="sidebar-o enable-page-overlay sidebar side-scroll sidebar-dark page-header-dark
- page-header main-content-boxed">
+ page-header main-content-narrow">
     <!-- Side Overlay-->
     @include('pages.overlay')
     <!-- END Side Overlay -->
@@ -102,7 +104,12 @@
 <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
 <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
 
+<!-- jQuery (required for all plugin) -->
+<script src="{{ asset('js/lib/jquery.min.js') }}"></script>
+
 <!-- Module -->
 @yield('js')
+
+@stack('script')
 </body>
 </html>

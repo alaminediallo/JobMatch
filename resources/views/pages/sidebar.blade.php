@@ -57,7 +57,13 @@
                        href="{{ route('home') }}">
                         <i class="nav-main-link-icon fa fa-home"></i>
                         <span class="nav-main-link-name">Home</span>
-                        {{--                        <span class="nav-main-link-badge badge rounded-pill bg-primary">5</span>--}}
+                    </a>
+                </li>
+                <li class="nav-main-item">
+                    <a class="nav-main-link{{ request()->routeIs('role.*') ? ' active' : '' }}"
+                       href="{{ route('role.index') }}">
+                        <i class="nav-main-link-icon fa fa-universal-access"></i>
+                        <span class="nav-main-link-name">Role</span>
                     </a>
                 </li>
                 {{--                <li class="nav-main-heading">Various</li>--}}
