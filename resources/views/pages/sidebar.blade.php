@@ -53,18 +53,15 @@
         <div class="content-side content-side-full">
             <ul class="nav-main">
                 <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->routeIs('home') ? ' active' : '' }}"
-                       href="{{ route('home') }}">
-                        <i class="nav-main-link-icon fa fa-home"></i>
-                        <span class="nav-main-link-name">Home</span>
-                    </a>
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')" icon="home">
+                        Home
+                    </x-nav-link>
                 </li>
                 <li class="nav-main-item">
-                    <a class="nav-main-link{{ request()->routeIs('role.*') ? ' active' : '' }}"
-                       href="{{ route('role.index') }}">
-                        <i class="nav-main-link-icon fa fa-universal-access"></i>
-                        <span class="nav-main-link-name">Role</span>
-                    </a>
+                    <x-nav-link :href="route('role.index')" :active="request()->routeIs('role.*')"
+                                icon="universal-access">
+                        Role
+                    </x-nav-link>
                 </li>
                 {{--                <li class="nav-main-heading">Various</li>--}}
                 {{--<li class="nav-main-item{{ request()->routeIs('pages.*') ? ' open' : '' }}">
