@@ -66,7 +66,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            @error('user_ids[]')
+                            @error('user_ids')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -104,7 +104,7 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                @error('permissions[]')
+                                @error('permissions')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

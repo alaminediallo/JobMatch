@@ -10,7 +10,8 @@ class RoleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'min:5',
+            'name' => [
+                'required', 'min:2',
                 Rule::unique('roles')->ignore($this->route('role')),
             ],
             'user_ids' => 'nullable',

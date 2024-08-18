@@ -62,52 +62,56 @@
                             </td>
                             <td>
                                 <div class="truncated-text">
-                                    @foreach ($role->users as $user)
+                                    @forelse ($role->users as $user)
                                         {{ (Str::ucfirst($user->name . ' ' . $user->prenom)) }}
                                         @unless($loop->last)
                                             {{ ', ' }}
                                         @endunless
-                                    @endforeach
+                                    @empty
+                                        Aucun utilisateur pour ce rôle
+                                    @endforelse
                                 </div>
                             </td>
                             <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="{{ route('role.edit', $role) }}"
-                                       type="button" class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"
-                                       data-bs-toggle="tooltip" aria-label="Modifier"
-                                       data-bs-original-title="Modifier" data-bs-placement="top">
-                                        <i class="fa fa-pencil-alt"></i>
-                                    </a>
-                                    @if ($role->etat)
-                                        <a href="{{ route('role.activer', $role) }}"
-                                           type="button" class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
-                                           data-bs-toggle="tooltip" aria-label="Désactiver"
-                                           data-bs-original-title="Désactiver" data-bs-placement="top">
-                                            <i class="fa fa-thumbs-up"></i>
+                                    @if($role->deletable)
+                                        <a href="{{ route('role.edit', $role) }}"
+                                           type="button" class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"
+                                           data-bs-toggle="tooltip" aria-label="Modifier"
+                                           data-bs-original-title="Modifier" data-bs-placement="top">
+                                            <i class="fa fa-pencil-alt"></i>
                                         </a>
-                                    @else
-                                        <a href="{{ route('role.activer', $role) }}" type="button"
-                                           class="btn btn-md btn-alt-warning js-bs-tooltip-enabled"
-                                           data-bs-toggle="tooltip" aria-label="Activer"
-                                           data-bs-original-title="Activer" data-bs-placement="top">
-                                            <i class="fa fa-thumbs-down"></i>
-                                        </a>
-                                    @endif
+                                        @if ($role->etat)
+                                            <a href="{{ route('role.activer', $role) }}"
+                                               type="button" class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
+                                               data-bs-toggle="tooltip" aria-label="Désactiver"
+                                               data-bs-original-title="Désactiver" data-bs-placement="top">
+                                                <i class="fa fa-thumbs-up"></i>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('role.activer', $role) }}" type="button"
+                                               class="btn btn-md btn-alt-warning js-bs-tooltip-enabled"
+                                               data-bs-toggle="tooltip" aria-label="Activer"
+                                               data-bs-original-title="Activer" data-bs-placement="top">
+                                                <i class="fa fa-thumbs-down"></i>
+                                            </a>
+                                        @endif
 
-                                    @unless($role->etat)
-                                        <form action="{{ route('role.destroy', $role) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <a href="#" type="button" onclick="event.preventDefault();
+                                        @if(! $role->etat)
+                                            <form action="{{ route('role.destroy', $role) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a href="#" type="button" onclick="event.preventDefault();
                                             if(confirm('Êtes-vous sûr de vouloir supprimer ?')){
                                             this.closest('form').submit();}"
-                                               class="btn btn-md btn-alt-danger js-bs-tooltip-enabled"
-                                               data-bs-toggle="tooltip" aria-label="Supprimer"
-                                               data-bs-original-title="Supprimer" data-bs-placement="top">
-                                                <i class="fa fa-times"></i>
-                                            </a>
-                                        </form>
-                                    @endunless
+                                                   class="btn btn-md btn-alt-danger js-bs-tooltip-enabled"
+                                                   data-bs-toggle="tooltip" aria-label="Supprimer"
+                                                   data-bs-original-title="Supprimer" data-bs-placement="top">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
+                                            </form>
+                                        @endif
+                                    @endif
                                 </div>
                             </td>
                         </tr>

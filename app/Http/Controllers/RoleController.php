@@ -108,7 +108,8 @@ class RoleController extends Controller
     {
         if ($role->etat && $role->isAssignedToUsers()) {
             return back()
-                ->with('error', 'Impossible de désactiver le rôle, car il est attribué à un ou plusieurs utilisateurs.');
+                ->with('error',
+                    'Impossible de désactiver le rôle, car il est attribué à un ou plusieurs utilisateurs.');
         }
 
         $isModelActive = $role->etat;
