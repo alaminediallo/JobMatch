@@ -9,23 +9,14 @@ class PermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        // Définir les actions communes
-        $actions = ['voir', 'créer', 'modifier', 'supprimer'];
+        // Définir les actions communes et les entités concernées
+        $actions = collect(['voir', 'créer', 'modifier', 'supprimer']);
+        $entities = collect(['utilisateur', 'candidat', 'candidature', 'offre', 'recruteur', 'role']);
 
-        // Définir les entités concernées
-        $entities = ['utilisateur', 'candidat', 'candidature', 'offre', 'entreprise', 'role'];
-
-        // Générer les permissions
-        $permissions = [];
-        foreach ($entities as $entity) {
-            foreach ($actions as $action) {
-                $permissions[] = "{$action} {$entity}";
-            }
-        }
-
-        // Créer les permissions si elles n'existent pas déjà
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
-        }
+        // Générer et créer les permissions si elles n'existent pas déjà
+        $actions->crossJoin($entities)->each(function ($pair) {
+            [$action, $entity] = $pair;
+            Permission::firstOrCreate(['name' => "{$action} {$entity}"]);
+        });
     }
 }

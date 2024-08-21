@@ -3,8 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\TypeUser;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -21,6 +23,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'prenom',
+        'tel',
+        'etat',
+        'adresse',
+        'nom_entreprise',
+        'description_entreprise',
     ];
 
     /**
@@ -33,24 +42,43 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /**
+     * Vérifie si l'utilisateur a une permission spécifique via son rôle.
+     */
     public function hasPermissionTo($permission): bool
     {
-        // Vérifie si l'utilisateur possède des rôles qui ont la permission spécifiée
-        return $this->roles()->whereHas('permissions', function ($query) use ($permission) {
-            // Filtre les rôles pour ceux qui ont la permission spécifiée
-            $query->where('name', $permission);
-        })->exists(); // Vérifie l'existence de ces rôles avec la permission
+        // Vérifie si le rôle de l'utilisateur a la permission spécifiée
+        return $this->role && $this->role->permissions()->where('name', $permission)->exists();
     }
 
-    public function roles(): BelongsToMany
+    public function role(): BelongsTo
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsTo(Role::class);
     }
 
+    /**
+     * Vérifie si l'utilisateur est administrateur.
+     */
     public function isAdministrator(): bool
     {
         // Vérifie si l'utilisateur possède un rôle nommé 'Administrateur'
-        return $this->roles()->where('nom', 'Administrateur')->exists(); // Vérifie l'existence de ce rôle
+        return $this->role && $this->role->name === 'Administrateur';
+    }
+
+    /**
+     * Scope a query to only include active users.
+     */
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('etat', true);
+    }
+
+    /**
+     * Scope a query to only include users of a given type.
+     */
+    public function scopeOfType(Builder $query, string $type): void
+    {
+        $query->where('type_user', $type);
     }
 
     /**
@@ -63,6 +91,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'etat' => 'boolean',
+            'type_user' => TypeUser::class,
         ];
     }
 }

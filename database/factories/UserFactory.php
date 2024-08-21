@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,23 +24,41 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $nom = ['Ndiaye', 'Diop', 'Bah', 'Diallo', 'Faye', 'Sow', 'Sy', 'Sarr', 'Kane',
-            'Thiam', 'Fall', 'Dieng', 'Camara'];
+        $noms = collect([
+            'Ndiaye', 'Diop', 'Bah', 'Diallo', 'Faye', 'Sow', 'Sy', 'Sarr', 'Kane',
+            'Thiam', 'Fall', 'Dieng', 'Camara',
+        ]);
 
-        $prenom = ['Mamadou', 'Fatou', 'Abdoulaye', 'Adama', 'Amadou', 'Mariama', 'Ousmane',
-            'Ibrahima', 'Astou', 'Aliou', 'Zeynabou', 'Cheikh', 'Moussa', 'Lamine', 'Souleymane', 'Bintou'];
+        $prenoms = collect([
+            'Mamadou', 'Fatou', 'Abdoulaye', 'Adama', 'Amadou', 'Mariama', 'Ousmane',
+            'Ibrahima', 'Astou', 'Aliou', 'Zeynabou', 'Cheikh', 'Moussa', 'Lamine', 'Souleymane', 'Bintou',
+        ]);
 
         $safeEmail = fake()->unique()->safeEmail();
 
         return [
-            'name' => fake()->randomElement($nom),
-            'prenom' => fake()->randomElement($prenom),
+            'name' => $noms->random(),
+            'prenom' => $prenoms->random(),
             'email' => $safeEmail,
-            'email_verified_at' => now(),
             'password' => Hash::make($safeEmail),
-            'type_user' => 'Candidat',
+            'tel' => fake()->phoneNumber(),
+            'role_id' => Role::factory(),
             'adresse' => fake()->address(),
         ];
+    }
+
+    public function configure(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $recruteurRoleId = Role::where('name', 'Recruteur')->value('id');
+
+            if ($user->role_id === $recruteurRoleId) {
+                $user->update([
+                    'nom_entreprise' => fake()->company(),
+                    'description_entreprise' => fake()->realTextBetween(200, 300),
+                ]);
+            }
+        });
     }
 
     /**
@@ -46,24 +66,8 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
-        ]);
-    }
-
-    public function entreprise(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'type_user' => 'Entreprise',
-            'nom_entreprise' => fake()->company(),
-            'description_entreprise' => fake()->realTextBetween(200, 300),
-        ]);
-    }
-
-    public function admin(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'type_user' => 'Administrateur',
         ]);
     }
 }

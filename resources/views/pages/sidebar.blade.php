@@ -58,9 +58,9 @@
                     </x-nav-link>
                 </li>
                 <li class="nav-main-item">
-                    <x-nav-link :href="route('role.index')" :active="request()->routeIs('role.*')"
-                                icon="universal-access">
-                        Role
+                    <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')"
+                                icon="user">
+                        Utilisateur
                     </x-nav-link>
                 </li>
                 {{--                <li class="nav-main-heading">Various</li>--}}

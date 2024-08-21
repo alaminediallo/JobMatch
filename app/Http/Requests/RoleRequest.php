@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -12,11 +13,11 @@ class RoleRequest extends FormRequest
         return [
             'name' => [
                 'required', 'min:2',
-                Rule::unique('roles')->ignore($this->route('role')),
+                Rule::unique(Role::class)->ignore($this->route('role')),
             ],
             'user_ids' => 'nullable',
-            'user_ids.*' => 'exists:users,id',
             'permissions' => ['required', 'min:1'],
+            'user_ids.*' => 'exists:users,id',
             'permissions.*' => 'exists:permissions,id',
         ];
     }

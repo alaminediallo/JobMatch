@@ -21,43 +21,34 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
         ]);
 
+        $roles = Role::whereIn('name', ['Administrateur', 'Recruteur', 'Candidat'])
+            ->pluck('id', 'name');
+
+        $adminRoleId = $roles['Administrateur'];
+        $recruteurRoleId = $roles['Recruteur'];
+        $candidatRoleId = $roles['Candidat'];
+
         // Créer le premier administrateur avec des données spécifiques
-        $admin = User::factory()->admin()->create([
-            'name' => 'Diallo',
-            'prenom' => 'Lamine',
-            'email' => 'admin@test.com',
-            'password' => Hash::make('admin@test.com'),
-        ]);
+        $this->createUser('Diallo', 'Lamine', 'admin@test.com', $adminRoleId);
 
-        $entreprise = User::factory()->entreprise()->create([
-            'email' => 'entreprise@test.com',
-            'password' => Hash::make('entreprise@test.com'),
-        ]);
-
-        $candidat = User::factory()->create([
-            'email' => 'candidat@test.com',
-            'password' => Hash::make('candidat@test.com'),
-        ]);
+        $this->createUser(null, null, 'recruteur@test.com', $recruteurRoleId);
+        $this->createUser(null, null, 'candidat@test.com', $candidatRoleId);
 
         // Créer les autres utilisateurs avec des rôles spécifiques
-        $adminUsers = User::factory(2)->admin()->create();
-        $entrepriseUsers = User::factory(5)->entreprise()->create();
-        $candidatUsers = User::factory(10)->create();
-
-        // Récupérer les IDs des rôles
-        $adminRoleIds = Role::all()->pluck('id');
-        $entrepriseRoleId = Role::where('name', 'entreprise')->value('id');
-        $candidatRoleId = Role::where('name', 'candidat')->value('id');
-
-        // Assigner les rôles aux utilisateurs
-        $admin->roles()->sync($adminRoleIds);
-        $adminUsers->each(fn ($admin) => $admin->roles()->sync($adminRoleIds));
-
-        $entreprise->roles()->sync([$entrepriseRoleId]);
-        $entrepriseUsers->each(fn ($user) => $user->roles()->sync([$entrepriseRoleId]));
-
-        $candidat->roles()->sync([$candidatRoleId]);
-        $candidatUsers->each(fn ($user) => $user->roles()->sync([$candidatRoleId]));
-
+        User::factory(2)->create(['role_id' => $adminRoleId]);
+        User::factory(5)->create(['role_id' => $recruteurRoleId]);
+        User::factory(10)->create(['role_id' => $candidatRoleId]);
     }
+
+    private function createUser(?string $name, ?string $prenom, string $email, int $roleId): void
+    {
+        User::factory()->create([
+            'name' => $name ?? fake()->lastName(),
+            'prenom' => $prenom ?? fake()->firstName(),
+            'email' => $email,
+            'password' => Hash::make($email),
+            'role_id' => $roleId,
+        ]);
+    }
+
 }

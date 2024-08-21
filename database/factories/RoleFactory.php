@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class RoleFactory extends Factory
 {
@@ -14,10 +13,6 @@ class RoleFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'etat' => $this->faker->boolean(),
-            'deletable' => $this->faker->boolean(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
         ];
     }
 }

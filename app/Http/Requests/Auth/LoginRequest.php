@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,16 @@ class LoginRequest extends FormRequest
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
+
+        // Récupération de l'utilisateur basé sur les informations de connexion
+        $user = User::where('email', $this->input('email'))->first();
+
+        // Vérification de l'état de l'utilisateur
+        if ($user && ! $user->etat) {
+            throw ValidationException::withMessages([
+                'email' => __('Votre compte est bloqué. Veuillez contacter l\'administrateur.'),
+            ]);
+        }
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());

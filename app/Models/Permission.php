@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Permission extends Model
 {
-    //    use HasFactory;
+    public $timestamps = false;
 
     public function roles(): BelongsToMany
     {
