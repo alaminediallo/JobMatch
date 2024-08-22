@@ -151,6 +151,10 @@ return [
     'url' => 'Le format de l\'URL de :attribute n\'est pas valide.',
     'uuid' => 'Le champ :attribute doit être un UUID valide',
     'attributes' => [
+        'type_entreprise_id' => "type de l'entreprise",
+        'nom_entreprise' => "nom de l'entreprise",
+        'description_entreprise' => "description de l'entreprise",
+        'role_id' => "rôle de l'utilisateur",
         'address' => 'adresse',
         'affiliate_url' => 'URL d\'affiliation',
         'age' => 'âge',
