@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             RoleSeeder::class,
+            TypeEntrepriseSeeder::class,
         ]);
 
         $roles = Role::whereIn('name', ['Administrateur', 'Recruteur', 'Candidat'])

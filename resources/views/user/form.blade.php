@@ -117,7 +117,7 @@
                                     @foreach ($roles as $role)
                                         <option
                                             value="{{ $role->id }}"
-                                            @selected(old('role_id', $user->role_id) === $role->id)>
+                                            @selected(old('role_id', $user->role_id) == $role->id)>
                                             {{ $role->name }}
                                         </option>
                                     @endforeach
@@ -127,7 +127,7 @@
                             <div class="col-md-6 mb-4 col-12">
                                 <x-input
                                     name="adresse"
-                                    label="Address"
+                                    label="Adresse"
                                     placeholder="Entrez l'adresse de l'utilisateur"
                                     :value="$user->adresse"
                                 />
@@ -137,7 +137,11 @@
                         <div id="dynamic-fields-container"
                              data-recruteur-role-id="{{ $roles->firstWhere('name', 'Recruteur')->id }}"
                              data-old-nom-entreprise="{{ old('nom_entreprise', $user->nom_entreprise ?? '') }}"
-                             data-old-description-entreprise="{{ old('description_entreprise', $user->description_entreprise ?? '') }}">
+                             data-old-description-entreprise="{{ old('description_entreprise', $user->description_entreprise ?? '') }}"
+                             data-type-entreprise-id="{{ old('type_entreprise_id', $user->type_entreprise_id ?? '') }}"
+                             data-types-entreprise="{{ $typesEntreprise->toJson() }}"
+                             data-errors="{{ json_encode($errors->toArray(), JSON_THROW_ON_ERROR) }}">
+
                         </div>
                     </div>
                 </div>
@@ -167,8 +171,11 @@
             const recruteurRoleId = dynamicFieldsContainer.dataset.recruteurRoleId
             const nomEntreprise = dynamicFieldsContainer.dataset.oldNomEntreprise
             const descriptionEntreprise = dynamicFieldsContainer.dataset.oldDescriptionEntreprise
+            const typesEntreprise = JSON.parse(dynamicFieldsContainer.dataset.typesEntreprise)
+            const typeEntrepriseId = dynamicFieldsContainer.dataset.typeEntrepriseId
+            const errors = JSON.parse(dynamicFieldsContainer.dataset.errors || '{}');
 
-            function createFormField({ type, name, label, placeholder, value = '', options = {} }) {
+            function createFormField({ type = 'text', name, label, placeholder, value = '', options = {} }) {
                 const div = document.createElement('div')
                 div.classList.add('col-12', 'mb-4')
 
@@ -181,6 +188,24 @@
                     field = document.createElement('textarea')
                     field.rows = options.rows || 4
                     field.textContent = value
+                } else if (type === 'select') {
+                    fieldLabel.innerHTML += '<span class="text-danger">*</span>'
+                    field = document.createElement('select')
+                    field.classList.add('form-select', 'js-select2')
+                    field.id = name
+
+                    const emptyOption = document.createElement('option')
+                    emptyOption.textContent = "Veuillez choisir un type d'entreprise..."
+                    field.setAttribute('required', '')
+                    field.appendChild(emptyOption)
+
+                    options.options.forEach((option) => {
+                        const opt = document.createElement('option')
+                        opt.value = option.id
+                        opt.textContent = option.name
+                        opt.selected = option.id == value // Sélectionne la valeur ancienne si disponible
+                        field.appendChild(opt)
+                    })
                 } else {
                     fieldLabel.innerHTML += '<span class="text-danger">*</span>'
                     field = document.createElement('input')
@@ -194,6 +219,17 @@
                 field.classList.add('form-control')
 
                 div.append(fieldLabel, field)
+
+                // Gérer les erreurs pour le champ
+                console.log(errors[name])
+                if (errors[name]) {
+                    field.classList.add('is-invalid')
+                    const errorDiv = document.createElement('div')
+                    errorDiv.classList.add('invalid-feedback')
+                    errorDiv.innerHTML = errors[name].join('<br>')
+                    div.appendChild(errorDiv)
+                }
+
                 return div
             }
 
@@ -202,7 +238,6 @@
 
                 if (roleSelect.value === recruteurRoleId) {
                     const nomEntrepriseField = createFormField({
-                        type: 'text',
                         name: 'nom_entreprise',
                         label: "Nom de l'entreprise",
                         placeholder: "Entrez le nom de l'entreprise",
@@ -216,8 +251,23 @@
                         value: descriptionEntreprise,
                         options: { rows: 4 }
                     })
-                    dynamicFieldsContainer.append(nomEntrepriseField, descriptionEntrepriseField)
+                    const typeEntrepriseField = createFormField({
+                        type: 'select',
+                        name: 'type_entreprise_id',
+                        label: "Type d'entreprise",
+                        placeholder: "Sélectionnez le type d'entreprise",
+                        value: typeEntrepriseId,
+                        options: { options: typesEntreprise }
+                    });
+                    dynamicFieldsContainer.append(nomEntrepriseField, typeEntrepriseField, descriptionEntrepriseField)
                 }
+
+                // Initialisation de Select2 sur le nouveau champ select
+                setTimeout(() => {
+                    $('.js-select2').select2({
+                        width: '100%', // Vous pouvez ajuster selon vos besoins
+                    });
+                }, 100); // Ajout d'un délai pour s'assurer que le DOM est entièrement prêt
             }
 
             // Appel initial pour afficher les champs si nécessaire
@@ -225,7 +275,7 @@
 
             // Ajout de l'écouteur d'événement sur le changement de sélection
             roleSelect.addEventListener('change', toggleRecruteurFields)
-        });
+        })
     </script>
 @endpush
 

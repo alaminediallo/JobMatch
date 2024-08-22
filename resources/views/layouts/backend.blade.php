@@ -100,6 +100,7 @@
     <!-- END Footer -->
 </div>
 <!-- END Page Container -->
+@stack('script')
 
 <!-- Alternatively, you can also include a specific color theme after the main stylesheet to alter the default color theme of the template -->
 <script src="{{ asset('js/dashmix.app.min.js') }}"></script>
@@ -109,7 +110,5 @@
 
 <!-- Module -->
 @yield('js')
-
-@stack('script')
 </body>
 </html>

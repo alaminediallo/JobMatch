@@ -36,7 +36,8 @@ class UserRequest extends FormRequest
             'password_confirmation' => ['nullable', 'same:password'],
             'adresse' => ['nullable', 'string', 'max:255'],
             'role_id' => ['required', Rule::exists('roles', 'id')],
-            'nom_entreprise' => ['sometimes', 'string', 'min:4', 'max:100'],
+            'nom_entreprise' => ['required', 'string', 'min:4', 'max:100'],
+            'type_entreprise_id' => ['required', Rule::exists('type_entreprises', 'id')],
             'description_entreprise' => ['nullable', 'string', 'max:500'],
         ];
     }

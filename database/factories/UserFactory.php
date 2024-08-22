@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Role;
+use App\Models\TypeEntreprise;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -56,6 +57,7 @@ class UserFactory extends Factory
                 $user->update([
                     'nom_entreprise' => fake()->company(),
                     'description_entreprise' => fake()->realTextBetween(200, 300),
+                    'type_entreprise_id' => TypeEntreprise::inRandomOrder()->value('id'),
                 ]);
             }
         });

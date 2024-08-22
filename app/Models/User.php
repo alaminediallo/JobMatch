@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Enums\TypeUser;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,6 +28,7 @@ class User extends Authenticatable
         'adresse',
         'nom_entreprise',
         'description_entreprise',
+        'type_entreprise_id',
     ];
 
     /**
@@ -73,12 +72,9 @@ class User extends Authenticatable
         return $query->where('etat', true);
     }
 
-    /**
-     * Scope a query to only include users of a given type.
-     */
-    public function scopeOfType(Builder $query, string $type): void
+    public function typeEntreprise(): BelongsTo
     {
-        $query->where('type_user', $type);
+        return $this->belongsTo(TypeEntreprise::class);
     }
 
     /**
@@ -92,7 +88,6 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'etat' => 'boolean',
-            'type_user' => TypeUser::class,
         ];
     }
 }

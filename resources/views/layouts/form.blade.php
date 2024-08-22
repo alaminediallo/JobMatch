@@ -12,5 +12,4 @@
 
     <!-- Page JS Helpers (Select2 plugin) -->
     <script>Dashmix.helpersOnLoad(['jq-select2']);</script>
-
 @endsection

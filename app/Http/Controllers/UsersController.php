@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\Role;
+use App\Models\TypeEntreprise;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +30,7 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        $user = User::create($request->validated() + ['role_id' => $request->input('role_id')]);
+        $user = User::create($request->validated());
 
         return to_route('user.index')
             ->with('message', "L'utilisateur {$user->name} a été créé avec succès");
@@ -43,6 +44,7 @@ class UsersController extends Controller
         return view('user.add', [
             'user' => new User(),
             'roles' => Role::all(),
+            'typesEntreprise' => TypeEntreprise::all(),
         ]);
     }
 
@@ -62,6 +64,7 @@ class UsersController extends Controller
         return view('user.edit', [
             'user' => $user,
             'roles' => Role::all(),
+            'typesEntreprise' => TypeEntreprise::all(),
         ]);
     }
 
@@ -94,7 +97,7 @@ class UsersController extends Controller
      */
     public function update(UserRequest $request, User $user): RedirectResponse
     {
-        $user->fill($request->validated())->update(['role_id' => $request->input('role_id')]);
+        $user->update($request->validated());
 
         return to_route('user.index')
             ->with('message', "L'utilisateur {$user->name} a été modifié avec succès");
