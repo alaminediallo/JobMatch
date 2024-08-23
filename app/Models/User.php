@@ -83,7 +83,7 @@ class User extends Authenticatable
      */
     public function langues(): BelongsToMany
     {
-        return $this->belongsToMany(Langue::class, 'candidat_langue', foreignPivotKey: 'candidat_id')
+        return $this->belongsToMany(Langue::class, 'candidat_langue')
             ->withPivot('niveau');
     }
 

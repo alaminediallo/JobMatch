@@ -50,7 +50,7 @@
                                 :value="$langue->name"
                             />
                         </div>
-                        <label class="form-label" for="niveau">Niveau<span class="text-danger">*</span></label>
+                        <label class="form-label" for="niveau">Niveau <span class="text-danger">*</span></label>
                         <select class="form-select js-select2" name="niveau"
                                 data-placeholder="Choisir le rôle de l'utilisateur" id="niveau">
                             @foreach ($niveaux as $value => $label)

@@ -15,8 +15,17 @@ class LangueController extends Controller
      */
     public function index(): View
     {
+        // Récupère les langues associées à l'utilisateur connecté
+        $langues = Langue::whereHas('users', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->with([
+            'users' => function ($query) {
+                $query->where('user_id', auth()->id());
+            },
+        ])->get();
+
         return view("langue.index", [
-            'langues' => Langue::with('users')->get(),
+            'langues' => $langues,
         ]);
     }
 

@@ -16,7 +16,7 @@ class Langue extends Model
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'candidat_langue', relatedPivotKey: 'candidat_id')
+        return $this->belongsToMany(User::class, 'candidat_langue')
             ->withPivot('niveau');
     }
 }

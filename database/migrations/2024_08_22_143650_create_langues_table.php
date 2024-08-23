@@ -2,6 +2,7 @@
 
 use App\Enums\Niveau;
 use App\Models\Langue;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ return new class extends Migration {
         // Création de la table pivot 'candidat_langue'
         Schema::create('candidat_langue', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('candidat_id')->constrained('users')->cascadeOnDelete(); // Référence à la table users
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete()->cascadeOnUpdate(); // Référence à la table users
             $table->foreignIdFor(Langue::class)->constrained()->cascadeOnDelete(); // Référence à la table langues
             $table->enum('niveau', Niveau::getValues()); // Niveau de maîtrise de la langue
         });
