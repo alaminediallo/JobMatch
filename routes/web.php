@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LangueController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,10 @@ Route::view('/home', 'pages.home')->name('home');
 Route::middleware('auth')->group(function () {
 //    Route::resource('role', RoleController::class);
 //    route::get('role/activer/{role}', [RoleController::class, 'activer'])->name('role.activer');
+
+    Route::prefix('candidat')->group(function () {
+        Route::resource('langue', LangueController::class);
+    });
 
     Route::resource('user', UsersController::class);
     Route::patch('/users/{user}/activate', [UsersController::class, 'activate'])->name('user.activate');

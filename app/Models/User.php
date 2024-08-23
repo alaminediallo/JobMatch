@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -75,6 +76,15 @@ class User extends Authenticatable
     public function typeEntreprise(): BelongsTo
     {
         return $this->belongsTo(TypeEntreprise::class);
+    }
+
+    /**
+     * Les langues parlées par cet utilisateur.
+     */
+    public function langues(): BelongsToMany
+    {
+        return $this->belongsToMany(Langue::class, 'candidat_langue', foreignPivotKey: 'candidat_id')
+            ->withPivot('niveau');
     }
 
     /**

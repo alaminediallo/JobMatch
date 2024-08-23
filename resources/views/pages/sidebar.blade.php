@@ -63,22 +63,22 @@
                         Utilisateur
                     </x-nav-link>
                 </li>
-                {{--                <li class="nav-main-heading">Various</li>--}}
-                {{--<li class="nav-main-item{{ request()->routeIs('pages.*') ? ' open' : '' }}">
+                <li class="nav-main-heading">Paramètres</li>
+                <li class="nav-main-item{{ request()->is('candidat/*') ? ' open' : '' }}">
                     <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
                        aria-expanded="true" href="#">
-                        <i class="nav-main-link-icon fa fa-lightbulb"></i>
-                        <span class="nav-main-link-name">Examples</span>
+                        <i class="nav-main-link-icon fa fa-wrench"></i>
+                        <span class="nav-main-link-name">Candidat</span>
                     </a>
                     <ul class="nav-main-submenu">
-                        --}}{{--<li class="nav-main-item">
-                            <a class="nav-main-link{{ request()->is('pages/blank') ? ' active' : '' }}"
-                               href="/pages/blank">
-                                <span class="nav-main-link-name">Blank</span>
+                        <li class="nav-main-item">
+                            <a class="nav-main-link{{ request()->routeIs('langue.*') ? ' active' : '' }}"
+                               href="{{ route('langue.index') }}">
+                                <span class="nav-main-link-name">Langue</span>
                             </a>
-                        </li>--}}{{--
+                        </li>
                     </ul>
-                </li>--}}
+                </li>
             </ul>
         </div>
         <!-- END Side Navigation -->
