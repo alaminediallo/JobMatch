@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CompetenceController;
 use App\Http\Controllers\LangueController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
@@ -18,6 +19,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('candidat')->group(function () {
         Route::resource('langue', LangueController::class);
+        Route::resource('competence', CompetenceController::class)->except('show');
     });
 
     Route::resource('user', UsersController::class);

@@ -45,7 +45,7 @@ class User extends Authenticatable
     /**
      * Vérifie si l'utilisateur a une permission spécifique via son rôle.
      */
-    public function hasPermissionTo($permission): bool
+    public function hasPermissionTo(string $permission): bool
     {
         // Vérifie si le rôle de l'utilisateur a la permission spécifiée
         return $this->role && $this->role->permissions()->where('name', $permission)->exists();
@@ -85,6 +85,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Langue::class, 'candidat_langue')
             ->withPivot('niveau');
+    }
+
+    /**
+     * Les competences de cet utilisateur.
+     */
+    public function competences(): BelongsToMany
+    {
+        return $this->belongsToMany(Competence::class, 'candidat_competence');
     }
 
     /**
