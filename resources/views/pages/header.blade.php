@@ -28,7 +28,8 @@
                     <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-fw fa-user d-sm-none"></i>
-                        <span class="d-none d-sm-inline-block">{{ Auth::user()->name }}</span>
+                        <span class="d-none d-sm-inline-block"
+                        >{{ Auth::user()->name . ' ' . (Auth::user()->prenom) ?? '' }}</span>
                         <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
                     </button>
                 @endauth
