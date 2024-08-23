@@ -88,6 +88,14 @@
                                 </a>
                             </li>
                         </ul>
+                        <ul class="nav-main-submenu">
+                            <li class="nav-main-item">
+                                <a class="nav-main-link{{ request()->routeIs('experience.*') ? ' active' : '' }}"
+                                   href="{{ route('experience.index') }}">
+                                    <span class="nav-main-link-name">Experience</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endauth
 
