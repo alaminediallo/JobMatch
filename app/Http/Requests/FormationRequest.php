@@ -10,7 +10,7 @@ class FormationRequest extends FormRequest
     {
         return [
             'name' => ['required', 'max:150'],
-            'diplome' => ['nullable', 'file', 'mimes:pdf', 'max:2048'], // Nouveau champ pour le PDF
+            'diplome' => ['nullable', 'file', 'mimes:pdf', 'max:2048'],
             'institution' => ['required', 'max:100'],
             'date_debut' => ['required', 'date'],
             'date_fin' => ['required', 'date', 'after_or_equal:date_debut'],

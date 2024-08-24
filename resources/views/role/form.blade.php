@@ -67,7 +67,7 @@
                                 @endforeach
                             </select>
                             @error('user_ids')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                                     @endforeach
                                 </div>
                                 @error('permissions')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="text-danger mt-1">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -117,9 +117,6 @@
                 <button type="submit" class="btn btn-md btn-alt-primary">
                     <i class="fa fa-check opacity-50 me-1">
                     </i> {{ $isEditPage ? 'Modifier' : 'Enregistrer'  }}
-                </button>
-                <button type="reset" class="btn btn-md btn-alt-secondary">
-                    <i class="fa fa-sync-alt opacity-50 me-1"></i> Effacer
                 </button>
             </div>
             <!-- END Submit -->

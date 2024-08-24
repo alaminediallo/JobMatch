@@ -25,8 +25,12 @@
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
                         <h3 class="block-title">Experience détail</h3>
+                        <div>
+                            <a href="{{ route('experience.edit', $experience) }}"
+                               class="btn btn-md btn-alt-primary">Modifier cette experience</a>
+                        </div>
                     </div>
-                    <div class="block-content py-3 space-y-2">
+                    <div class="block-content py-3 space-y-2 fs-5">
                         <div><span class="fw-bold">Id: </span> N°{{ $experience->id }}</div>
                         <div><span class="fw-bold">Titre du post: </span> {{ $experience->titre_post }}</div>
                         <div><span class="fw-bold">Entreprise: </span> {{ $experience->entreprise }}</div>

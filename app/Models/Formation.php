@@ -14,7 +14,6 @@ class Formation extends Model
         'date_fin',
         'institution',
         'description',
-        'user_id',
     ];
 
     public function user(): BelongsTo
