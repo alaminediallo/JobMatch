@@ -13,7 +13,7 @@ class UsersController extends Controller
 {
     public function __construct()
     {
-//        $this->authorizeResource(User::class, 'user');
+        //        $this->authorizeResource(User::class, 'user');
     }
 
     public function index(): View
@@ -42,7 +42,7 @@ class UsersController extends Controller
     public function create(): View
     {
         return view('user.add', [
-            'user' => new User(),
+            'user' => new User,
             'roles' => Role::all(),
             'typesEntreprise' => TypeEntreprise::all(),
         ]);

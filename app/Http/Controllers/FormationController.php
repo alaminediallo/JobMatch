@@ -117,7 +117,7 @@ class FormationController extends Controller
     public function create()
     {
         return view('formation.add', [
-            'formation' => new Formation(),
+            'formation' => new Formation,
         ]);
     }
 }

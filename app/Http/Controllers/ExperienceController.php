@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\ExperienceRequest;
 use App\Models\Experience;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +26,7 @@ class ExperienceController extends Controller
     {
         $request->user()->experiences()->create($request->validated());
 
-        return to_route('experience.index')->with('message', "Experience a été crée avec succès");
+        return to_route('experience.index')->with('message', 'Experience a été crée avec succès');
     }
 
     /**
@@ -36,7 +35,7 @@ class ExperienceController extends Controller
     public function create()
     {
         return view('experience.add', [
-            'experience' => new Experience(),
+            'experience' => new Experience,
         ]);
     }
 
@@ -63,7 +62,7 @@ class ExperienceController extends Controller
     {
         $experience->delete();
 
-        return back()->with('message', "Experience supprimer avec succès");
+        return back()->with('message', 'Experience supprimer avec succès');
     }
 
     /**
@@ -73,6 +72,6 @@ class ExperienceController extends Controller
     {
         $experience->update($request->validated());
 
-        return to_route('experience.index')->with('message', "Experience a été modifié avec succès");
+        return to_route('experience.index')->with('message', 'Experience a été modifié avec succès');
     }
 }

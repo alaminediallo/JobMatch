@@ -20,7 +20,6 @@ class UserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-
     public function rules(): array
     {
         $passwordRules = $this->isMethod('post') // Lors de la création, le mot de passe est requis

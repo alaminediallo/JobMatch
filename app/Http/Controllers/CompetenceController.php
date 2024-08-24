@@ -46,7 +46,7 @@ class CompetenceController extends Controller
     public function create(): View
     {
         return view('competence.add', [
-            'competence' => new Competence(),
+            'competence' => new Competence,
         ]);
     }
 

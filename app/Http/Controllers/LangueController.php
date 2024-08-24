@@ -24,7 +24,7 @@ class LangueController extends Controller
             },
         ])->get();
 
-        return view("langue.index", [
+        return view('langue.index', [
             'langues' => $langues,
         ]);
     }
@@ -49,7 +49,7 @@ class LangueController extends Controller
     public function create(): View
     {
         return view('langue.add', [
-            'langue' => new Langue(),
+            'langue' => new Langue,
             'niveaux' => Niveau::getLabels(), // On peut précharger les niveaux pour les afficher
             'niveau' => '',
         ]);
@@ -88,7 +88,6 @@ class LangueController extends Controller
 
         // Mise à jour dans la table pivot avec un utilisateur spécifique
         $request->user()->langues()->updateExistingPivot($langue->id, ['niveau' => $request->validated('niveau')]);
-
 
         return redirect()->route('langue.index')
             ->with('message', 'Langue mise à jour avec succès.');

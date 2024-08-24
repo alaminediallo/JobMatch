@@ -51,5 +51,4 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleId,
         ]);
     }
-
 }
