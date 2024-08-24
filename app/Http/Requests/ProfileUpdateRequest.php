@@ -17,7 +17,16 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'email' => [
+                'required', 'string', 'lowercase', 'email', 'max:255',
+                Rule::unique(User::class)->ignore($this->user()->id),
+            ],
+            'prenom' => ['required', 'string', 'max:255'],
+            'tel' => ['nullable', 'string', 'max:20'],
+            'adresse' => ['nullable', 'string', 'max:255'],
+            'nom_entreprise' => ['required', 'string', 'min:4', 'max:100'],
+            'type_entreprise_id' => ['required', Rule::exists('type_entreprises', 'id')],
+            'description_entreprise' => ['nullable', 'string', 'max:500'],
         ];
     }
 }
