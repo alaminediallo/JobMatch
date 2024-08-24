@@ -76,14 +76,11 @@
                             </div>
                         </div>
                         <div>
-                            <label class="form-label" for="description">Description</label>
-                            <textarea class="form-control @error('description')is-invalid @enderror"
-                                      id="description" rows="4" name="description"
-                                      placeholder="Petite description de vôtre experience !"
-                            >{{ old('description', $experience->description) }}</textarea>
-                            @error('description')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <x-textarea
+                                name="description"
+                                label="Description"
+                                placeholder="Petite description de vôtre experience !"
+                            >{{ old('description', $experience->description) }}</x-textarea>
                         </div>
                     </div>
                 </div>
