@@ -182,6 +182,7 @@ return [
         'deleted_at'               => 'supprimé à',
         'description'              => 'la description',
         'description_entreprise'   => 'description de l\'entreprise',
+        'diplome'                  => 'diplôme',
         'display_type'             => 'Type d\'affichage',
         'district'                 => 'quartier',
         'duration'                 => 'durée',
