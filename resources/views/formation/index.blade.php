@@ -32,7 +32,7 @@
                 <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
                     <thead>
                     <tr>
-                        <th style="width: 25%;">Nom</th>
+                        <th style="width: 25%;">Nom de la formation</th>
                         <th style="width: 25%;">Institution</th>
                         <th>Date de début</th>
                         <th>Date de fin</th>

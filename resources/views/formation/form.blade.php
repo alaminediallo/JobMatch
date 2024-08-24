@@ -59,37 +59,36 @@
                         </div>
                         <div class="d-md-flex gap-md-2">
                             <div class="col-md-6 mb-4 col-12">
-                                <label class="form-label" for="date_debut">Date début <span class="text-danger">*</span></label>
-                                <input type="text"
-                                       class="js-flatpickr form-control @error('date_debut') is-invalid @enderror"
-                                       id="date_debut" name="date_debut"
-                                       placeholder="Date du début" data-alt-input="true" data-date-format="Y-m-d"
-                                       data-alt-format="j F Y"
-                                       value="{{old('date_debut', $formation->date_debut?->format('Y-m-d'))}}">
-                                @error('date_debut')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <x-input
+                                    name="date_debut"
+                                    label="Date début"
+                                    placeholder="Date du début"
+                                    class="js-flatpickr"
+                                    :value="$formation->date_debut?->format('Y-m-d')"
+                                    data-alt-input="true" data-date-format="Y-m-d"
+                                    data-alt-format="j F Y"
+                                />
                             </div>
                             <div class="col-md-6 mb-4 col-12">
-                                <label class="form-label" for="date_fin">Date fin</label>
-                                <input type="text"
-                                       class="js-flatpickr form-control @error('date_fin') is-invalid @enderror"
-                                       id="date_fin" name="date_fin"
-                                       placeholder="Date de fin" data-alt-input="true" data-date-format="Y-m-d"
-                                       data-alt-format="j F Y"
-                                       value="{{old('date_fin', $formation->date_fin?->format('Y-m-d'))}}">
-                                @error('date_fin')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <x-input
+                                    name="date_fin"
+                                    label="Date fin"
+                                    placeholder="Date de fin"
+                                    class="js-flatpickr"
+                                    :value="$formation->date_fin?->format('Y-m-d')"
+                                    data-alt-input="true" data-date-format="Y-m-d"
+                                    data-alt-format="j F Y"
+                                    :required="false"
+                                />
                             </div>
                         </div>
                         <div class="mb-4">
-                            <label class="form-label" for="diplome">Diplôme (PDF)</label>
-                            <input type="file" name="diplome" id="diplome"
-                                   class="form-control @error('diplome') is-invalid @enderror">
-                            @error('diplome')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <x-input
+                                type="file"
+                                name="diplome"
+                                label="Diplôme (PDF)"
+                                :required="false"
+                            />
 
                             @if ($isEditPage && $formation->diplome)
                                 <a href="{{ asset('storage/' . $formation->diplome) }}" target="_blank"
@@ -155,7 +154,7 @@
                 preview.style.display = 'block'; // Afficher l'aperçu
             } else if (file.type !== "application/pdf") {
                 preview.src = "#"
-                preview.style.display = 'none'; // Afficher l'aperçu
+                preview.style.display = 'none'; // Cacher l'aperçu
             }
         });
     </script>

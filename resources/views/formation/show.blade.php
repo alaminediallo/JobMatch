@@ -25,8 +25,12 @@
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
                         <h3 class="block-title">Formation détail</h3>
+                        <div>
+                            <a href="{{ route('formation.edit', $formation) }}"
+                               class="btn btn-md btn-alt-primary">Modifier cette formation</a>
+                        </div>
                     </div>
-                    <div class="block-content py-3 space-y-2 fs-4">
+                    <div class="block-content py-3 space-y-2 fs-5">
                         <div><span class="fw-bold">Id: </span> N°{{ $formation->id }}</div>
                         <div><span class="fw-bold">Nom de la formation: </span> {{ $formation->name }}</div>
                         <div><span class="fw-bold">Institution: </span> {{ $formation->institution }}</div>
@@ -42,12 +46,18 @@
                             {{ $formation->description ?? 'Pas de description pour cette formation' }}
                         </div>
                         @if ($formation->diplome)
-                            <p>
+                            <div>
                                 <strong>Aperçu du Diplôme :</strong>
                                 <br>
                                 <embed src="{{ asset('storage/' . $formation->diplome) }}"
                                        width="100%" height="700" type="application/pdf">
-                            </p>
+                            </div>
+                        @else
+                            <div>
+                                <strong>Diplôme :</strong>
+                                Pas de diplôme reçu pour cette formation
+                            </div>
+
                         @endif
 
                     </div>
