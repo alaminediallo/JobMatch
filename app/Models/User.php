@@ -105,6 +105,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Les formations de cet utilisateur.
+     */
+    public function formations(): HasMany
+    {
+        return $this->hasMany(Formation::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
