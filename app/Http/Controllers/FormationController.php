@@ -6,6 +6,7 @@ use App\Http\Requests\FormationRequest;
 use App\Models\Formation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class FormationController extends Controller
@@ -63,7 +64,7 @@ class FormationController extends Controller
             }
 
             // Générer un nom de fichier unique
-            $fileName = $this->generatePdfFileName($request->file('diplome'), $data['name']);
+            $fileName = $this->generatePdfFileName($data);
 
             // Stocker le fichier avec le nom personnalisé
             $data['diplome'] = $request->file('diplome')->storeAs('diplomes', $fileName, 'public');
@@ -78,14 +79,15 @@ class FormationController extends Controller
     /**
      * Générer un nom unique pour le fichier PDF.
      */
-    protected function generatePdfFileName($file, $formationName): string
+    protected function generatePdfFileName(array $data): string
     {
         $timestamp = now()->timestamp;
-        $user_id = auth()->id();
-        $extension = $file->getClientOriginalExtension();
-        $sanitizedFormationName = \Str::slug($formationName);
+        $userId = auth()->id();
+        $extension = $data['diplome']->getClientOriginalExtension();
+        $formationName = Str::slug($data['name']);
+        $institutionName = Str::slug($data['institution']);
 
-        return "{$sanitizedFormationName}_{$user_id}_{$timestamp}.{$extension}";
+        return "{$formationName}_{$institutionName}_{$userId}_{$timestamp}.{$extension}";
     }
 
     /**
@@ -97,7 +99,7 @@ class FormationController extends Controller
 
         if ($request->hasFile('diplome')) {
             // Générer un nom de fichier unique
-            $fileName = $this->generatePdfFileName($request->file('diplome'), $data['name']);
+            $fileName = $this->generatePdfFileName($data);
 
             // Stocker le fichier avec le nom personnalisé
             $data['diplome'] = $request->file('diplome')->storeAs('diplomes', $fileName, 'public');
