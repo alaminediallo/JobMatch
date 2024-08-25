@@ -5,6 +5,10 @@
     <script src="{{asset('js/pages/op_auth_signup.min.js')}}"></script>
 @endsection
 
+@php
+    $roles = \App\Models\Role::whereNot('name', 'Administrateur')->get();
+@endphp
+
 @section('content')
     <!-- Page Content -->
     <div class="bg-image" style="background-image: url('{{asset('media/photos/photo14@2x.jpg')}}');">
@@ -13,7 +17,8 @@
                 <!-- Sign Up Block -->
                 <div class="block block-transparent block-rounded w-100 mb-0 overflow-hidden">
                     <div
-                        class="block-content block-content-full px-lg-5 px-xl-6 py-4 py-md-5 py-lg-6 bg-body-extra-light">
+                        class="block-content block-content-full px-lg-5 px-xl-6 py-2 py-md-3 py-lg-5
+                        bg-body-extra-light">
                         <!-- Header -->
                         <div class="mb-2 text-center">
                             <a class="link-fx fw-bold fs-1" href="{{ route('home')}}">
@@ -27,10 +32,10 @@
                         <form class="js-validation-signup" action="{{ route('register') }}" method="POST">
                             @csrf
 
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <div class="input-group input-group-lg">
                                     <input type="text" class="form-control" id="name" name="name"
-                                           placeholder="Username" value="{{ old('name') }}" autofocus>
+                                           placeholder="Nom" value="{{ old('name') }}" autofocus>
                                     <span class="input-group-text"><i class="fa fa-user-circle"></i></span>
                                 </div>
                                 @error('name')
@@ -38,7 +43,18 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-4">
+                            <div class="mb-3">
+                                <div class="input-group input-group-lg">
+                                    <input type="text" class="form-control" id="prenom" name="prenom"
+                                           placeholder="Prénom" value="{{ old('prenom') }}">
+                                    <span class="input-group-text"><i class="fa fa-user-circle"></i></span>
+                                </div>
+                                @error('prenom')
+                                <div class="text-danger mt-1 fs-sm">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <div class="input-group input-group-lg">
                                     <input type="email" class="form-control" id="email" name="email"
                                            placeholder="Email" required value="{{ old('email') }}">
@@ -49,7 +65,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <div class="input-group input-group-lg">
                                     <input type="password" class="form-control" id="password"
                                            name="password" placeholder="Password">
@@ -60,7 +76,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-4">
+                            <div class="mb-3">
                                 <div class="input-group input-group-lg">
                                     <input type="password" class="form-control" id="password_confirmation"
                                            name="password_confirmation" placeholder="Password Confirm">
@@ -71,7 +87,22 @@
                                 @enderror
                             </div>
 
-                            <div class="text-center mb-4">
+                            <div class="mb-4">
+                                <select class="form-select form-control" name="role_id"
+                                        data-placeholder="Choisir votre type l'utilisateur" id="role_id">
+                                    <option value="">Choisir votre type l'utilisateur</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}">
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('role_id')
+                                <div class="text-danger mt-1 fs-sm">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="text-center">
                                 <button type="submit" class="btn w-100 btn-hero btn-primary">
                                     <i class="fa fa-fw fa-plus opacity-50 me-1"></i> S'inscrire
                                 </button>
