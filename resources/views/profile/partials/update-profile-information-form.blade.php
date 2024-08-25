@@ -73,7 +73,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('adresse')"/>
         </div>
 
-        @if($user->typeEntreprise)
+        @if($user->isRecruteur())
             <div class="mb-3">
                 <x-input-label for="nom_entreprise" value="Nom de l'entreprise"/>
                 <span class="text-danger">*</span>
