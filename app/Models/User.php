@@ -67,6 +67,15 @@ class User extends Authenticatable
     }
 
     /**
+     * Vérifie si l'utilisateur est un recruteur.
+     */
+    public function isRecruteur(): bool
+    {
+        // Vérifie si l'utilisateur possède un rôle nommé 'Recruteur'
+        return $this->role && $this->role->name === 'Recruteur';
+    }
+
+    /**
      * Scope a query to only include active users.
      */
     public function scopeActive(Builder $query): Builder
