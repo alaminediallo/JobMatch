@@ -75,7 +75,7 @@
 
     'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
 -->
-<div id="page-container" class="sidebar-o enable-page-overlay sidebar side-scroll sidebar-dark page-header-dark
+<div id="page-container" class="sidebar-o enable-page-overlay sidebar side-scroll page-header-dark
  page-header main-content-narrow">
     <!-- Side Overlay-->
     @include('pages.overlay')
