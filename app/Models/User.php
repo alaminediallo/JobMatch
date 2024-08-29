@@ -122,6 +122,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Les offres d'emplois de cet utilisateur.
+     */
+    public function offres(): HasMany
+    {
+        return $this->hasMany(Offre::class);
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

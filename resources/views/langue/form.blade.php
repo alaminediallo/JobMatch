@@ -52,7 +52,8 @@
                         </div>
                         <label class="form-label" for="niveau">Niveau <span class="text-danger">*</span></label>
                         <select class="form-select js-select2" name="niveau"
-                                data-placeholder="Choisir le rôle de l'utilisateur" id="niveau">
+                                data-placeholder="Choisir le rôle de l'utilisateur..." id="niveau">
+                            <option></option>
                             @foreach ($niveaux as $value => $label)
                                 <option
                                     value="{{ $value }}"

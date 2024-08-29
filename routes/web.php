@@ -3,13 +3,15 @@
 use App\Http\Controllers\CompetenceController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\FormationController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LangueController;
+use App\Http\Controllers\OffreController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/home');
-Route::view('/home', 'pages.home')->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 //Route::get('/home', static function () {
 //    return view('pages.home');
@@ -25,6 +27,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('experience', ExperienceController::class);
         Route::resource('formation', FormationController::class);
     });
+
+    Route::resource('offre', OffreController::class);
 
     Route::resource('user', UsersController::class);
     Route::patch('/users/{user}/activate', [UsersController::class, 'activate'])->name('user.activate');

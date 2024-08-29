@@ -19,3 +19,19 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+/*h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+}*/
+
+.balance {
+    text-wrap: balance;
+}
+
+.pagination {
+    margin-bottom: 0;
+}
+
+#delete-button {
+    border-radius: 0 0.25rem 0.25rem 0;
+}

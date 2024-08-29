@@ -260,5 +260,20 @@
     "Yes": "Oui",
     "You are receiving this email because we received a password reset request for your account.": "Vous recevez cet e-mail car nous avons reçu une demande de réinitialisation de mot de passe pour votre compte.",
     "You're logged in!": "Vous êtes connecté·e !",
-    "Your email address is unverified.": "Votre adresse e-mail n'est pas vérifiée."
+    "Your email address is unverified.": "Votre adresse e-mail n'est pas vérifiée.",
+    "Find your dream job": "Trouvez votre job idéal",
+    "today": "aujourd'hui",
+    "We offer the most complete job platform to publish your job offers and apply for your dream job.": "Nous offrons la plateforme de travail la plus complète pour publier vos offres de travail et vous inscrire à votre job idéal.",
+    "Search Job": "Rechercher une offre",
+    "Apply": "Postuler",
+    "Post a new Job": "Poster une nouvelle offre",
+    "Your current jobs": "Vos offre actuels",
+    "Job Information": "Informations sur l'offre",
+    "Please fill all the required Job information": "Veuillez remplir toutes les informations requises de l'offre",
+    "Job Meta": "Métadonnées de l'offre",
+    "A few extra meta fields and we are almost done": "Quelques champs supplémentaires de métadonnées et nous sommes presque prêts",
+    "Post new Job": "Poster une nouvelle offre",
+    "Edit job :name": "Modifier l'offre :name",
+    "Job Summary": "Résumé de l'offre",
+    "Job Description": "Description de l'offre"
 }

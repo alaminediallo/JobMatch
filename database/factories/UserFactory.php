@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
+use App\Models\Offre;
 use App\Models\Role;
 use App\Models\TypeEntreprise;
 use App\Models\User;
@@ -53,11 +55,23 @@ class UserFactory extends Factory
         return $this->afterCreating(function (User $user) {
             $recruteurRoleId = Role::where('name', 'Recruteur')->value('id');
 
+
             if ($user->role_id === $recruteurRoleId) {
+                $randomTypeEntrepriseId = TypeEntreprise::inRandomOrder()->value('id');
+
                 $user->update([
                     'nom_entreprise' => fake()->company(),
                     'description_entreprise' => fake()->realTextBetween(200, 300),
-                    'type_entreprise_id' => TypeEntreprise::inRandomOrder()->value('id'),
+                    'type_entreprise_id' => $randomTypeEntrepriseId,
+                ]);
+
+                Offre::factory(random_int(1, 2))->create([
+                    'user_id' => $user->id,
+                    'category_id' => Category::inRandomOrder()->value('id'),
+                ]);
+                Offre::factory(random_int(2, 3))->create([
+                    'user_id' => $user->id,
+                    'category_id' => Category::inRandomOrder()->value('id'),
                 ]);
             }
         });

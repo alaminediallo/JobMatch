@@ -65,6 +65,12 @@
                             Utilisateur
                         </x-nav-link>
                     </li>
+                    <li class="nav-main-item">
+                        <x-nav-link :href="route('offre.index')" :active="request()->routeIs('offre.*')"
+                                    icon="briefcase">
+                            Offres
+                        </x-nav-link>
+                    </li>
                     <li class="nav-main-heading">Paramètres</li>
                     <li class="nav-main-item{{ request()->is('candidat/*') ? ' open' : '' }}">
                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"

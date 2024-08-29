@@ -85,8 +85,9 @@
 
             <div class="mb-3">
                 <x-input-label for="type_entreprise_id" value="Type d'entreprise"/>
-                <select id="type_entreprise_id" name="type_entreprise_id" class="form-select js-select2">
-                    <option value="">Choisir le type d'entreprise...</option>
+                <select id="type_entreprise_id" name="type_entreprise_id" class="form-select js-select2"
+                        data-placeholder="Choisir le type d'entreprise...">
+                    <option></option>
                     @foreach ($typeEntreprises as $typeEntreprise)
                         <option value="{{ $typeEntreprise->id }}"
                             @selected(old('type_entreprise_id', $user->typeEntreprise?->id) == $typeEntreprise->id)>
