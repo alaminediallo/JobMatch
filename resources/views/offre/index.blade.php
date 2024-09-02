@@ -72,13 +72,22 @@
                             <td class="text-center">
                                 <div class="btn-group">
                                     @if($isAdmin)
-                                        <form action="{{ route('offre.validate', $offre) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn btn-md btn-alt-primary">
-                                                Valider
-                                            </button>
-                                        </form>
+                                        <div class="d-flex justify-content-between gap-2">
+                                            <form action="{{ route('offre.validate', $offre) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-md btn-alt-primary">
+                                                    Valider
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('offre.rejeter', $offre) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-md btn-alt-danger">
+                                                    Rejeter
+                                                </button>
+                                            </form>
+                                        </div>
                                     @else
                                         <a href="{{ route('offre.edit', $offre) }}"
                                            class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"

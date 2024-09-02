@@ -121,4 +121,19 @@ class OffreController extends Controller
 
         return to_route('offre.index')->with('message', 'Offre d\'emploi mise à jour avec succès.');
     }
+
+    /**
+     * Rejeter une offre d'emploi.
+     */
+    public function rejeterOffre(Offre $offre): RedirectResponse
+    {
+        if (! auth()->user()->isAdministrator()) {
+            abort(403, "Vous n'êtes pas autorisé à rejeter cette offre.");
+        }
+
+        // Rejeter l'offre
+        $offre->update(['statut' => StatutOffre::REJETER]);
+
+        return redirect()->back()->with('message', 'Offre rejetée avec succès.');
+    }
 }

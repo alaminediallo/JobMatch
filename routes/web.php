@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('offre', OffreController::class)->except('show');
     Route::patch('/offres/{offre}/validate', [OffreController::class, 'validateOffre'])
         ->name('offre.validate');
+    route::patch('/offres/{offre}/rejeter', [OffreController::class, 'rejeterOffre'])
+        ->name('offre.rejeter');
 
     Route::resource('user', UsersController::class);
     Route::patch('/users/{user}/activate', [UsersController::class, 'activate'])->name('user.activate');
