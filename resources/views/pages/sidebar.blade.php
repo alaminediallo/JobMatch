@@ -53,7 +53,7 @@
         <div class="content-side content-side-full">
             <ul class="nav-main">
                 <li class="nav-main-item">
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')" icon="home">
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home.*')" icon="home">
                         Home
                     </x-nav-link>
                 </li>

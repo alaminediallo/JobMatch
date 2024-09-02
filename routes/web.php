@@ -12,10 +12,19 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/home');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('home.search');
+Route::get('/offre/{offre}', [OffreController::class, 'show'])->name('offre.show');
 
 //Route::get('/home', static function () {
 //    return view('pages.home');
 //})->middleware(['auth', 'verified'])->name('home');
+
+
+route::get('/mailable', function () {
+    $offre = App\Models\Offre::find(1);
+
+    return new App\Mail\OffreCreatedNotification($offre);
+});
 
 Route::middleware('auth')->group(function () {
 //    Route::resource('role', RoleController::class);
@@ -28,7 +37,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('formation', FormationController::class);
     });
 
-    Route::resource('offre', OffreController::class);
+    Route::resource('offre', OffreController::class)->except('show');
+    Route::patch('/offres/{offre}/validate', [OffreController::class, 'validateOffre'])
+        ->name('offre.validate');
 
     Route::resource('user', UsersController::class);
     Route::patch('/users/{user}/activate', [UsersController::class, 'activate'])->name('user.activate');
