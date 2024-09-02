@@ -249,6 +249,7 @@ return [
         'rule'                     => 'règle',
         'rules'                    => 'règles',
         'salaire_proposer'         => 'salaire proposé',
+        'search-term'              => 'recherche',
         'second'                   => 'seconde',
         'sex'                      => 'sexe',
         'shipment'                 => 'expédition',
