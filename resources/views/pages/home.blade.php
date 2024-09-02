@@ -89,14 +89,6 @@
                                 <span class="badge bg-secondary rounded">{{ $offre->type_offre }}</span>
                             </div>
                         </div>
-                        @if (! auth()->check() || auth()->user()->isCandidat())
-                            <div class="ms-sm-3 mt-3 mt-sm-0">
-                                <a class="btn btn-primary w-100" href="#">
-                                    {{ __('Apply')}}
-                                </a>
-                            </div>
-                        @endif
-
                     </div>
                 </div>
             </div>
