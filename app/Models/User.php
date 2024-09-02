@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -49,7 +50,9 @@ class User extends Authenticatable
     public function hasPermissionTo(string $permission): bool
     {
         // Vérifie si le rôle de l'utilisateur a la permission spécifiée
-        return $this->role && $this->role->permissions()->where('name', $permission)->exists();
+        return $this->role()->whereHas('permissions', function ($query) use ($permission) {
+            $query->where('name', $permission);
+        })->exists();
     }
 
     public function role(): BelongsTo
@@ -63,7 +66,9 @@ class User extends Authenticatable
     public function isAdministrator(): bool
     {
         // Vérifie si l'utilisateur possède un rôle nommé 'Administrateur'
-        return $this->role && $this->role->name === 'Administrateur';
+        return Cache::rememberForever("user_{$this->id}_is_administrator", function () {
+            return $this->role()->where('name', 'Administrateur')->exists();
+        });
     }
 
     /**
@@ -72,7 +77,19 @@ class User extends Authenticatable
     public function isRecruteur(): bool
     {
         // Vérifie si l'utilisateur possède un rôle nommé 'Recruteur'
-        return $this->role && $this->role->name === 'Recruteur';
+        return Cache::rememberForever("user_{$this->id}_is_recruteur", function () {
+            return $this->role()->where('name', 'Recruteur')->exists();
+        });
+    }
+
+    /**
+     * Vérifie si l'utilisateur est un candidat.
+     */
+    public function isCandidat(): bool
+    {
+        return Cache::rememberForever("user_{$this->id}_is_candidat", function () {
+            return $this->role()->where('name', 'Candidat')->exists();
+        });
     }
 
     /**

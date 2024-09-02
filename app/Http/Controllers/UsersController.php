@@ -8,6 +8,7 @@ use App\Models\TypeEntreprise;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 
 class UsersController extends Controller
 {
@@ -98,6 +99,12 @@ class UsersController extends Controller
     public function update(UserRequest $request, User $user): RedirectResponse
     {
         $user->update($request->validated());
+
+        if ($user->isDirty('role_id')) {
+            Cache::forget("user_{$user->id}_is_administrator");
+            Cache::forget("user_{$user->id}_is_recruteur");
+            Cache::forget("user_{$user->id}_is_candidat");
+        }
 
         return to_route('user.index')
             ->with('message', "L'utilisateur {$user->name} a été modifié avec succès");

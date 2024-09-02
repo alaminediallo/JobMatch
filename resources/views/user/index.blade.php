@@ -36,7 +36,7 @@
                 <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
                     <thead>
                     <tr>
-                        <th style="width: 15%;">Name</th>
+                        <th>Name</th>
                         <th>Email</th>
                         <th>Role</th>
                         <th>Statut</th>

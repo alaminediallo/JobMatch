@@ -112,9 +112,7 @@
                         <div class="d-md-flex gap-md-2">
                             <div class="col-md-6 mb-4 col-12">
                                 <label class="form-label" for="role_id">Roles<span class="text-danger">*</span></label>
-                                <select class="form-select form-control" name="role_id"
-                                        data-placeholder="Choisir le rôle de l'utilisateur..." id="role_id">
-                                    <option></option>
+                                <select class="form-select form-control" name="role_id" id="role_id">
                                     @foreach ($roles as $role)
                                         <option
                                             value="{{ $role->id }}"
