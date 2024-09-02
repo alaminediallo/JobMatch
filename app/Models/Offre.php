@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,7 @@ class Offre extends Model
         'date_fin',
         'description',
         'category_id',
+        'is_validated',
     ];
 
     public function category(): BelongsTo
@@ -28,6 +30,11 @@ class Offre extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeValidated(Builder $query, bool $validated = true): Builder
+    {
+        return $query->where('is_validated', $validated);
     }
 
     protected function casts(): array

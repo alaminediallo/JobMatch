@@ -12,11 +12,25 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title fs-lg">
                     <i class="fa fa-briefcase text-muted me-1"></i>
-                    {{ __('Your current jobs')}}
+                    @if($isAdmin)
+                        {{ __('Jobs to be validated')}}
+                    @else
+                        {{ __('Your current jobs')}}
+                    @endif
                 </h3>
-                <div>
-                    <a href="{{ route('offre.create') }}" class="btn btn-md btn-primary">Ajouter une nouvelle offre</a>
-                </div>
+                @unless($isAdmin)
+                    @if(auth()->user()->type_entreprise_id)
+                        <div>
+                            <a href="{{ route('offre.create') }}" class="btn btn-md btn-primary"
+                            >Ajouter une nouvelle offre</a>
+                        </div>
+                    @else
+                        <div>
+                            <a href="{{ route('profile.edit') }}" class="btn btn-md btn-primary"
+                            >Complétez votre profil</a>
+                        </div>
+                    @endif
+                @endunless
             </div>
             <div class="block-content block-content-full overflow-x-auto">
                 <table class="table table-bordered table-striped table-vcenter js-dataTable-responsive">
@@ -24,8 +38,13 @@
                     <tr>
                         <th>Titre du poste</th>
                         <th>Type de l'offre</th>
-                        <th>Salaire proposé</th>
+                        @if($isAdmin)
+                            <th>Entreprise</th>
+                        @else
+                            <th>Salaire proposé</th>
+                        @endif
                         <th>Date de fin</th>
+                        <th>Statut</th>
                         <th style="width: 15%;">Actions</th>
                     </tr>
                     </thead>
@@ -38,34 +57,54 @@
                                 </a>
                             </td>
                             <td>{{ Str::title($offre->type_offre) }}</td>
-                            <td>{{ $offre->salaire_proposer . " FCFA" }}</td>
+                            @if($isAdmin)
+                                <td>{{ $offre->user->nom_entreprise }}</td>
+                            @else
+                                <td>{{ $offre->salaire_proposer . " FCFA" }}</td>
+                            @endif
                             <td>{{ $offre->date_fin->format('d M Y') }}</td>
                             <td class="text-center">
+                                <span
+                                    class="badge px-2 {{ $offre->is_validated ? 'bg-success' : 'bg-warning' }}">
+                                    {{ $offre->is_validated ? 'Validée' : 'En attente' }}
+                                </span>
+                            </td>
+                            <td class="text-center">
                                 <div class="btn-group">
-                                    <a href="{{ route('offre.edit', $offre) }}"
-                                       class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"
-                                       data-bs-toggle="tooltip" aria-label="Modifier"
-                                       data-bs-original-title="Modifier">
-                                        <i class="fa fa-pencil-alt"></i>
-                                    </a>
-                                    {{--                                    <a href="{{ route('offre.candidatures', $offre) }}"--}}
-                                    <a href=""
-                                       class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
-                                       data-bs-toggle="tooltip" aria-label="Voir les candidatures"
-                                       data-bs-original-title="Voir les candidatures">
-                                        <i class="fa fa-users"></i>
-                                    </a>
-                                    <form action="{{ route('offre.destroy', $offre) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" id="delete-button"
-                                                onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')"
-                                                class="btn btn-md btn-alt-danger js-bs-tooltip-enabled"
-                                                data-bs-toggle="tooltip" aria-label="Supprimer"
-                                                data-bs-original-title="Supprimer">
-                                            <i class="fa fa-times"></i>
-                                        </button>
-                                    </form>
+                                    @if($isAdmin)
+                                        <form action="{{ route('offre.validate', $offre) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-md btn-alt-primary">
+                                                <i class="fa fa-check"></i> Valider
+                                            </button>
+                                        </form>
+                                    @else
+                                        <a href="{{ route('offre.edit', $offre) }}"
+                                           class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"
+                                           data-bs-toggle="tooltip" aria-label="Modifier"
+                                           data-bs-original-title="Modifier">
+                                            <i class="fa fa-pencil-alt"></i>
+                                        </a>
+                                        {{--                                    <a href="{{ route('offre.candidatures', $offre) }}"--}}
+                                        <a href=""
+                                           class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
+                                           data-bs-toggle="tooltip" aria-label="Voir les candidatures"
+                                           data-bs-original-title="Voir les candidatures">
+                                            <i class="fa fa-users"></i>
+                                        </a>
+                                        <form action="{{ route('offre.destroy', $offre) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" id="delete-button"
+                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')"
+                                                    class="btn btn-md btn-alt-danger js-bs-tooltip-enabled"
+                                                    data-bs-toggle="tooltip" aria-label="Supprimer"
+                                                    data-bs-original-title="Supprimer">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

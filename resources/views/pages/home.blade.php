@@ -17,14 +17,18 @@
             <div class="row justify-content-center">
                 <div class="col-sm-10 col-lg-8 col-xl-6">
                     <div class="p-2 rounded bg-body-light shadow-sm">
-                        <form class="d-flex align-items-center" action="#" method="POST"
-                              onclick="return false;">
+                        <form class="d-flex align-items-start" action="{{ route('home.search') }}" method="GET">
                             <div class="flex-grow-1">
                                 <label class="visually-hidden" for="example-job-search"
-                                >{{ __('Search Job')}}</label>
-                                <input type="text" class="form-control form-control-lg form-control-alt"
-                                       id="example-job-search" name="example-job-search"
-                                       placeholder="{{ __('Search Job')}}..">
+                                >{{ __('Search Job by title or type')}}</label>
+                                <input type="text" id="example-job-search" name="search-term"
+                                       class="form-control form-control-lg form-control-alt
+                                       @error('search-term') is-invalid @enderror"
+                                       placeholder="{{ __('Search Job by title or type')}}.."
+                                       value="{{ request('search-term') ?? '' }}">
+                                @error('search-term')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="flex-grow-0 ms-2">
                                 <button type="submit" class="btn btn-lg btn-primary">
@@ -32,6 +36,7 @@
                                 </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -63,40 +68,53 @@
     <div class="content content-boxed content-full">
         <!-- Jobs -->
 
-        @foreach($offres as $offre)
+        @forelse ($offres as $offre)
             <div class="card shadow-sm rounded-2 mb-4">
                 <div class="card-body px-5">
                     <div class="d-sm-flex align-items-start">
                         <div class="flex-grow-1">
-                            <a class="link-fx h4 mb-1 d-inline-block text-primary" href="#">
+                            <a class="link-fx h4 mb-1 d-inline-block text-primary"
+                               href="{{ route('offre.show', $offre) }}">
                                 {{ $offre->title }}
                             </a>
                             <div class="fs-sm fw-semibold text-muted mb-2">
                                 {{ $offre->category->name }} - {{ $offre->created_at->diffForHumans() }}
+                                <br>
+                                Offre expire {{ $offre->date_fin->diffForHumans() }}
                             </div>
                             <p class="text-muted mb-2 truncated-text balance">
-                                {{ $offre->description }}
+                                {{ $offre->description ?? 'Pas de description pour cette offre' }}
                             </p>
-                            <div>
+                            <div class="d-inline-block">
                                 <span class="badge bg-secondary rounded">{{ $offre->type_offre }}</span>
                             </div>
                         </div>
-                        <div class="ms-sm-3 mt-3 mt-sm-0">
-                            <a class="btn btn-primary w-100" href="#">
-                                {{ __('Apply')}}
-                            </a>
-                        </div>
+                        @if (! auth()->check() || auth()->user()->isCandidat())
+                            <div class="ms-sm-3 mt-3 mt-sm-0">
+                                <a class="btn btn-primary w-100" href="#">
+                                    {{ __('Apply')}}
+                                </a>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
             </div>
-        @endforeach
-
-        <div class="d-flex justify-content-center align-items-center mt-4 py-3 bg-body-extra-light">
-            <div class="shadow-sm rounded">
-                {{ $offres->links() }}
+        @empty
+            <div class="d-flex justify-content-center align-items-center fs-lg fw-semibold text-muted">
+                Aucune offre disponible.
             </div>
-            <!-- END Jobs -->
-        </div>
+            {{--            Aucunue offre disponible pour le moment.--}}
+        @endforelse
+
+        @if ($offres->hasPages())
+            <div class="d-flex justify-content-center align-items-center mt-4 py-3 bg-body-extra-light">
+                <div class="shadow-sm rounded">
+                    {{ $offres->links() }}
+                </div>
+                <!-- END Jobs -->
+            </div>
+        @endif
     </div>
     <!-- END Page Content -->
 @endsection

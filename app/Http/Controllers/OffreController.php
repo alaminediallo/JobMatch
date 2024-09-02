@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TypeOffre;
+use App\Events\OffreCreated;
 use App\Http\Requests\OffreRequest;
 use App\Models\Category;
 use App\Models\Offre;
@@ -11,17 +12,22 @@ use Illuminate\View\View;
 
 class OffreController extends Controller
 {
-    // TODO: Faire valider l'offre par l'admin avant de l'afficher pour le candidat
     /**
      * Affiche la liste des offres d'emploi.
      */
     public function index(): View
     {
-        $offres = Offre::with('category')
-            ->where('user_id', auth()->id())
-            ->get();
+        if (auth()->user()->isAdministrator()) {
+            return view('offre.index', [
+                'offres' => Offre::with('user')->validated(false)->get(),
+                'isAdmin' => true,
+            ]);
+        }
 
-        return view('offre.index', compact('offres'));
+        return view('offre.index', [
+            'offres' => auth()->user()->offres,
+            'isAdmin' => false,
+        ]);
     }
 
     /**
@@ -29,7 +35,10 @@ class OffreController extends Controller
      */
     public function store(OffreRequest $request): RedirectResponse
     {
-        $request->user()->offres()->create($request->validated());
+        $offre = $request->user()->offres()->create($request->validated());
+
+        // envoyer un mail à l'admin lors de la création d'une offre
+        event(new OffreCreated($offre));
 
         return to_route('offre.index')->with('message', 'Offre d\'emploi créée avec succès.');
     }
@@ -37,8 +46,12 @@ class OffreController extends Controller
     /**
      * Affiche le formulaire pour créer une nouvelle offre d'emploi.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
+        if (! auth()->user()->type_entreprise_id) {
+            return to_route('profile.edit');
+        }
+
         return view('offre.add', [
             'offre' => new Offre(),
             'categories' => Category::all(),
@@ -51,7 +64,10 @@ class OffreController extends Controller
      */
     public function show(Offre $offre): View
     {
-        return view('offre.show', compact('offre'));
+        return view('offre.show', [
+            'offre' => $offre,
+            'isAdmin' => auth()->user()?->isAdministrator() ?? false,
+        ]);
     }
 
     /**
@@ -67,16 +83,6 @@ class OffreController extends Controller
     }
 
     /**
-     * Met à jour une offre d'emploi spécifique dans la base de données.
-     */
-    public function update(OffreRequest $request, Offre $offre): RedirectResponse
-    {
-        $offre->update($request->validated());
-
-        return to_route('offre.index')->with('message', 'Offre d\'emploi mise à jour avec succès.');
-    }
-
-    /**
      * Supprime une offre d'emploi spécifique de la base de données.
      */
     public function destroy(Offre $offre): RedirectResponse
@@ -85,5 +91,28 @@ class OffreController extends Controller
         $offre->delete();
 
         return to_route('offre.index')->with('message', 'Offre d\'emploi supprimée avec succès.');
+    }
+
+
+    public function validateOffre(Offre $offre): RedirectResponse
+    {
+        if (! auth()->user()->isAdministrator()) {
+            abort(403, "Vous n'êtes pas autorisé à valider cette offre.");
+        }
+
+        // Mettre à jour le champ is_validated
+        $offre->update(['is_validated' => true]);
+
+        return to_route('offre.index')->with('message', 'Offre validée avec succès.');
+    }
+
+    /**
+     * Met à jour une offre d'emploi spécifique dans la base de données.
+     */
+    public function update(OffreRequest $request, Offre $offre): RedirectResponse
+    {
+        $offre->update($request->validated());
+
+        return to_route('offre.index')->with('message', 'Offre d\'emploi mise à jour avec succès.');
     }
 }

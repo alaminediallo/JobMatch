@@ -21,17 +21,27 @@
                         </div>
                     </div>
                     <div class="col-md-4 d-flex align-items-center">
-                        <a class="block block-rounded block-link-shadow block-transparent bg-black-50 text-center mb-0 mx-auto"
-                           href="#">
+                        <a class="block block-rounded block-link-shadow block-transparent bg-black-50
+                        text-center mb-0 mx-auto">
                             <div class="block-content block-content-full px-5 py-4">
                                 <div class="fs-2 fw-semibold text-white">
                                     {{ Number::abbreviate($offre->salaire_proposer) . ' FCFA' }}
                                 </div>
                                 <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Salaire proposé
                                 </div>
-                                <span class="btn btn-hero btn-primary">
-                        <i class="fa fa-arrow-right opacity-50 me-1"></i> {{ __('Apply')}}
-                      </span>
+                                @if (! $offre->is_validated && $isAdmin)
+                                    <form action="{{ route('offre.validate', $offre) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-hero btn-primary">
+                                            <i class="fa fa-check opacity-50 me-1"></i> {{ __('Validate')}}
+                                        </button>
+                                    </form>
+                                @elseif (! auth()->check() || auth()->user()->isCandidat())
+                                    <span class="btn btn-hero btn-primary">
+                                        <i class="fa fa-arrow-right opacity-50 me-1"></i> {{ __('Apply')}}
+                                    </span>
+                                @endif
                             </div>
                         </a>
                     </div>
@@ -73,10 +83,52 @@
                                 <div class="fw-semibold">Date de publication</div>
                                 <div class="text-muted">{{ $offre->created_at->diffForHumans() }}</div>
                             </li>
+                            <li>
+                      <span class="fa-li text-primary">
+                        <i class="fa fa-calendar-check"></i>
+                      </span>
+                                <div class="fw-semibold">Date limite de candidature</div>
+                                <div class="text-muted">{{ $offre->date_fin->diffForHumans() }}</div>
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <!-- END Job Summary -->
+
+                @if($isAdmin)
+                    <!-- Recruteur description -->
+                    <div class="block block-rounded">
+                        <div class="block-header block-header-default">
+                            <h3 class="block-title">{{__('Recruteur description')}}</h3>
+                        </div>
+                        <div class="block-content">
+                            <ul class="fa-ul list-icons">
+                                <li>
+                      <span class="fa-li text-primary">
+                        <i class="fa fa-user"></i>
+                      </span>
+                                    <div class="fw-semibold">Nom complet</div>
+                                    <div class="text-muted">{{ $offre->user->name . ' ' . $offre->user->prenom }}</div>
+                                </li>
+                                <li>
+                                  <span class="fa-li text-primary">
+                                    <i class="fa fa-envelope"></i>
+                                  </span>
+                                    <div class="fw-semibold">Email</div>
+                                    <div class="text-muted">{{ $offre->user->email }}</div>
+                                </li>
+                                <li>
+                      <span class="fa-li text-primary">
+                        <i class="fa fa-phone"></i>
+                      </span>
+                                    <div class="fw-semibold">Téléphone</div>
+                                    <div class="text-muted">{{ $offre->user->tel }}</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- END Recruteur description -->
+                @endif
             </div>
             <div class="col-md-8 order-md-0">
                 <!-- Job Description -->
@@ -85,12 +137,12 @@
                         <h3 class="block-title">{{__('Job Description')}}</h3>
                     </div>
                     <div class="block-content">
-                        <p>{{ $offre->description }}</p>
+                        <p>{{ $offre->description ?? 'Pas de description pour cette offre' }}</p>
                     </div>
                 </div>
                 <!-- END Job Description -->
 
-                <!-- Similar Jobs -->
+                <!-- Entreprise -->
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
                         <h3 class="block-title">Entreprise</h3>
@@ -98,7 +150,7 @@
                     <div class="block-content">
                         <div class="row">
                             <div
-                                class="block-content block-content-full d-flex align-items-center justify-content-between">
+                                class="d-flex align-items-center justify-content-between">
                                 <div class="me-3">
                                     <div class="d-md-flex gap-md-2 align-items-center justify-content-between">
                                         <p class="fs-lg fw-semibold">
@@ -127,7 +179,7 @@
                         </ul>
                     </div>
                 </div>
-                <!-- END Similar Jobs -->
+                <!-- END Entreprise -->
             </div>
         </div>
     </div>
