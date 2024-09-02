@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\StatutOffre;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,7 +12,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('offres', function (Blueprint $table) {
-            $table->boolean('is_validated')->default(false)->after('user_id');
+            $table->enum('statut', StatutOffre::getValues())
+                ->default(StatutOffre::EN_ATTENTE->value)
+                ->after('user_id');
         });
     }
 
@@ -21,7 +24,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('offres', function (Blueprint $table) {
-            $table->dropColumn('is_validated');
+            $table->dropColumn('statut');
         });
     }
 };

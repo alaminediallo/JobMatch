@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatutOffre;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +20,7 @@ class Offre extends Model
         'date_fin',
         'description',
         'category_id',
-        'is_validated',
+        'statut',
     ];
 
     public function category(): BelongsTo
@@ -32,14 +33,16 @@ class Offre extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scopeValidated(Builder $query, bool $validated = true): Builder
+    // offre valide
+    public function scopeValidated(Builder $query): Builder
     {
-        return $query->where('is_validated', $validated);
+        return $query->where('statut', StatutOffre::VALIDER);
     }
 
     protected function casts(): array
     {
         return [
+            'statut' => StatutOffre::class,
             'date_debut' => 'date',
             'date_fin' => 'date',
         ];

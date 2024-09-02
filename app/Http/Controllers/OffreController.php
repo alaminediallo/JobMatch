@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StatutOffre;
 use App\Enums\TypeOffre;
 use App\Events\OffreCreated;
 use App\Http\Requests\OffreRequest;
@@ -17,16 +18,18 @@ class OffreController extends Controller
      */
     public function index(): View
     {
-        if (auth()->user()->isAdministrator()) {
+        $isAdmin = auth()->user()->isAdministrator();
+
+        if ($isAdmin) {
             return view('offre.index', [
-                'offres' => Offre::with('user')->validated(false)->get(),
-                'isAdmin' => true,
+                'offres' => Offre::with('user')->whereStatut(StatutOffre::EN_ATTENTE)->get(),
+                'isAdmin' => $isAdmin,
             ]);
         }
 
         return view('offre.index', [
             'offres' => auth()->user()->offres,
-            'isAdmin' => false,
+            'isAdmin' => $isAdmin,
         ]);
     }
 
@@ -94,6 +97,9 @@ class OffreController extends Controller
     }
 
 
+    /**
+     * Valider une offre d'emploi.
+     */
     public function validateOffre(Offre $offre): RedirectResponse
     {
         if (! auth()->user()->isAdministrator()) {
@@ -101,7 +107,7 @@ class OffreController extends Controller
         }
 
         // Mettre à jour le champ is_validated
-        $offre->update(['is_validated' => true]);
+        $offre->update(['statut' => StatutOffre::VALIDER]);
 
         return to_route('offre.index')->with('message', 'Offre validée avec succès.');
     }

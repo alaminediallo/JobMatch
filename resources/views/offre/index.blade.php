@@ -56,7 +56,7 @@
                                     {{ $offre->title }}
                                 </a>
                             </td>
-                            <td>{{ Str::title($offre->type_offre) }}</td>
+                            <td style="width: 15%;">{{ Str::title($offre->type_offre) }}</td>
                             @if($isAdmin)
                                 <td>{{ $offre->user->nom_entreprise }}</td>
                             @else
@@ -65,8 +65,8 @@
                             <td>{{ $offre->date_fin->format('d M Y') }}</td>
                             <td class="text-center">
                                 <span
-                                    class="badge px-2 {{ $offre->is_validated ? 'bg-success' : 'bg-warning' }}">
-                                    {{ $offre->is_validated ? 'Validée' : 'En attente' }}
+                                    class="badge px-2 {{ $offre->statut->badgeClass() }}">
+                                    {{ $offre->statut->value }}
                                 </span>
                             </td>
                             <td class="text-center">
@@ -76,7 +76,7 @@
                                             @csrf
                                             @method('PATCH')
                                             <button type="submit" class="btn btn-md btn-alt-primary">
-                                                <i class="fa fa-check"></i> Valider
+                                                Valider
                                             </button>
                                         </form>
                                     @else
