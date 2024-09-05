@@ -13,23 +13,14 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', '/home');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('home.search');
-Route::get('/offre/{offre}', [OffreController::class, 'show'])->name('offre.show');
-
-//Route::get('/home', static function () {
-//    return view('pages.home');
-//})->middleware(['auth', 'verified'])->name('home');
-
 
 route::get('/mailable', function () {
     $offre = App\Models\Offre::find(1);
 
-    return new App\Mail\OffreCreatedNotification($offre);
+    return new App\Mail\OffreCreatedMail($offre);
 });
 
 Route::middleware('auth')->group(function () {
-//    Route::resource('role', RoleController::class);
-//    route::get('role/activer/{role}', [RoleController::class, 'activer'])->name('role.activer');
-
     Route::prefix('candidat')->group(function () {
         Route::resource('langue', LangueController::class);
         Route::resource('competence', CompetenceController::class)->except('show');
@@ -51,5 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/offre/{offre}', [OffreController::class, 'show'])->name('offre.show');
 
 require __DIR__.'/auth.php';
