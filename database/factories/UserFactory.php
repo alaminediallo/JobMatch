@@ -55,7 +55,6 @@ class UserFactory extends Factory
         return $this->afterCreating(function (User $user) {
             $recruteurRoleId = Role::where('name', 'Recruteur')->value('id');
 
-
             if ($user->role_id === $recruteurRoleId) {
                 $randomTypeEntrepriseId = TypeEntreprise::inRandomOrder()->value('id');
 

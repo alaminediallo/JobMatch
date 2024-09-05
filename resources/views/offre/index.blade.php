@@ -19,15 +19,17 @@
                     @endif
                 </h3>
                 @unless($isAdmin)
-                    @if(auth()->user()->type_entreprise_id)
+                    @if(is_null(auth()->user()->type_entreprise_id))
                         <div>
-                            <a href="{{ route('offre.create') }}" class="btn btn-md btn-primary"
-                            >Ajouter une nouvelle offre</a>
+                            <a href="{{ route('profile.edit') }}" class="btn btn-md btn-primary">
+                                Complétez votre profil
+                            </a>
                         </div>
                     @else
                         <div>
-                            <a href="{{ route('profile.edit') }}" class="btn btn-md btn-primary"
-                            >Complétez votre profil</a>
+                            <a href="{{ route('offre.create') }}" class="btn btn-md btn-primary">
+                                Ajouter une nouvelle offre
+                            </a>
                         </div>
                     @endif
                 @endunless
@@ -60,7 +62,9 @@
                             @if($isAdmin)
                                 <td>{{ $offre->user->nom_entreprise }}</td>
                             @else
-                                <td>{{ $offre->salaire_proposer . " FCFA" }}</td>
+                                <td>
+                                    {{ number_format($offre->salaire_proposer, thousands_separator: ' ') . " FCFA" }}
+                                </td>
                             @endif
                             <td>{{ $offre->date_fin->format('d M Y') }}</td>
                             <td class="text-center">

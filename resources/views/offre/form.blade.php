@@ -61,7 +61,6 @@
                                     :value="$offre->date_debut?->format('Y-m-d')"
                                     data-alt-input="true" data-date-format="Y-m-d"
                                     data-alt-format="j F Y"
-
                                 />
                             </div>
                             <div class="col-6">
@@ -124,8 +123,6 @@
                                         @selected(old('category_id', $offre->category_id) == $category->id)
                                     >{{ $category->name }}</option>
                                 @endforeach
-                                <option value="1">Accounting</option>
-
                             </select>
                         </div>
                     </div>
@@ -149,6 +146,7 @@
     <!-- END Post Job Form -->
 </div>
 <!-- END Page Content -->
+
 @section('css-plugins')
     @parent
     <!-- Stylesheets -->

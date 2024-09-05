@@ -21,7 +21,7 @@ class OffreRequest extends FormRequest
             'type_offre' => ['required', Rule::in(TypeOffre::getValues())],
             'date_debut' => $dateDebutRules,
             'date_fin' => ['required', 'date', 'after:date_debut', 'date_format:Y-m-d'],
-            'description' => ['nullable', 'string', 'min:10', 'max:700'],
+            'description' => ['nullable', 'string', 'min:10', 'max:800'],
             'category_id' => ['required', Rule::exists('categories', 'id')],
         ];
     }

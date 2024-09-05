@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function search(Request $request): View|RedirectResponse
     {
         $request->validate([
-            'search-term' => 'required|string|max:30',
+            'search-term' => 'nullable|string|max:30',
         ]);
 
         $searchTerm = $request->input('search-term', '');
@@ -35,8 +35,9 @@ class HomeController extends Controller
             ->whereDate('date_fin', '>=', now())
             ->when($searchTerm, function ($query, $searchTerm) {
                 $query->whereAny(['title', 'type_offre'], 'LIKE', '%'.$searchTerm.'%');
+                $query->OrwhereRelation('category', 'name', 'LIKE', '%'.$searchTerm.'%');
             })
-            ->latest('date_fin')
+            ->orderBy('date_fin')
             ->paginate(10);
     }
 

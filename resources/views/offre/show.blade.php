@@ -66,7 +66,7 @@
                       <span class="fa-li text-primary">
                         <i class="fa fa-briefcase"></i>
                       </span>
-                                <div class="fw-semibold">Type d'emploi</div>
+                                <div class="fw-semibold">Type d'offre</div>
                                 <div class="text-muted">{{ $offre->type_offre }}</div>
                             </li>
                             <li>
@@ -74,7 +74,9 @@
                         <i class="fa fa-money-check-alt"></i>
                       </span>
                                 <div class="fw-semibold">Salaire</div>
-                                <div class="text-muted">{{ $offre->salaire_proposer . ' FCFA' }}</div>
+                                <div class="text-muted">
+                                    {{ number_format($offre->salaire_proposer, thousands_separator: ' ') . ' FCFA' }}
+                                </div>
                             </li>
                             <li>
                       <span class="fa-li text-primary">

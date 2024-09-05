@@ -3,7 +3,7 @@
 @section('content')
     <!-- Hero Section -->
     <div class="bg-body-extra-light text-center">
-        <div class="content content-boxed content-full py-3 py-md-5">
+        <div class="content content-boxed content-full py-5">
             <div class="row justify-content-center">
                 <div class="col-md-10 col-xl-6">
                     <h1 class="h2 mb-2">
@@ -15,16 +15,16 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="col-sm-10 col-lg-8 col-xl-6">
+                <div class="col-sm-11 col-lg-9 col-xl-7">
                     <div class="p-2 rounded bg-body-light shadow-sm">
                         <form class="d-flex align-items-start" action="{{ route('home.search') }}" method="GET">
                             <div class="flex-grow-1">
                                 <label class="visually-hidden" for="example-job-search"
-                                >{{ __('Search Job by title or type')}}</label>
+                                >{{ __('Search Job by title or type or category')}}</label>
                                 <input type="text" id="example-job-search" name="search-term"
                                        class="form-control form-control-lg form-control-alt
                                        @error('search-term') is-invalid @enderror"
-                                       placeholder="{{ __('Search Job by title or type')}}.."
+                                       placeholder="{{ __('Search Job by title or type or category')}}.."
                                        value="{{ request('search-term') ?? '' }}">
                                 @error('search-term')
                                 <span class="invalid-feedback">{{ $message }}</span>
