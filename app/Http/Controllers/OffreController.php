@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\StatutOffre;
 use App\Enums\TypeOffre;
-use App\Events\OffreCreated;
+use App\Events\OffreCreatedEvent;
+use App\Events\OffreEditedEvent;
+use App\Events\OffreRejectedEvent;
+use App\Events\OffreValidatedEvent;
 use App\Http\Requests\OffreRequest;
 use App\Models\Category;
 use App\Models\Offre;
@@ -13,23 +16,28 @@ use Illuminate\View\View;
 
 class OffreController extends Controller
 {
+    private bool $isAdmin;
+
+    public function __construct()
+    {
+        $this->isAdmin = auth()->user()->isAdministrator() ?? false;
+    }
+
     /**
      * Affiche la liste des offres d'emploi.
      */
     public function index(): View
     {
-        $isAdmin = auth()->user()->isAdministrator();
-
-        if ($isAdmin) {
+        if ($this->isAdmin) {
             return view('offre.index', [
                 'offres' => Offre::with('user')->whereStatut(StatutOffre::EN_ATTENTE)->get(),
-                'isAdmin' => $isAdmin,
+                'isAdmin' => $this->isAdmin,
             ]);
         }
 
         return view('offre.index', [
             'offres' => auth()->user()->offres,
-            'isAdmin' => $isAdmin,
+            'isAdmin' => $this->isAdmin,
         ]);
     }
 
@@ -41,7 +49,7 @@ class OffreController extends Controller
         $offre = $request->user()->offres()->create($request->validated());
 
         // envoyer un mail à l'admin lors de la création d'une offre
-        event(new OffreCreated($offre));
+        event(new OffreCreatedEvent($offre));
 
         return to_route('offre.index')->with('message', 'Offre d\'emploi créée avec succès.');
     }
@@ -51,7 +59,7 @@ class OffreController extends Controller
      */
     public function create(): View|RedirectResponse
     {
-        if (! auth()->user()->type_entreprise_id) {
+        if (is_null(auth()->user()->type_entreprise_id)) {
             return to_route('profile.edit');
         }
 
@@ -69,7 +77,7 @@ class OffreController extends Controller
     {
         return view('offre.show', [
             'offre' => $offre,
-            'isAdmin' => auth()->user()?->isAdministrator() ?? false,
+            'isAdmin' => $this->isAdmin,
         ]);
     }
 
@@ -96,18 +104,20 @@ class OffreController extends Controller
         return to_route('offre.index')->with('message', 'Offre d\'emploi supprimée avec succès.');
     }
 
-
     /**
      * Valider une offre d'emploi.
      */
     public function validateOffre(Offre $offre): RedirectResponse
     {
-        if (! auth()->user()->isAdministrator()) {
+        if (! $this->isAdmin) {
             abort(403, "Vous n'êtes pas autorisé à valider cette offre.");
         }
 
         // Mettre à jour le champ is_validated
         $offre->update(['statut' => StatutOffre::VALIDER]);
+
+        // envoyer un mail au recruteur lors de la validation d'une offre
+        event(new OffreValidatedEvent($offre));
 
         return to_route('offre.index')->with('message', 'Offre validée avec succès.');
     }
@@ -117,7 +127,10 @@ class OffreController extends Controller
      */
     public function update(OffreRequest $request, Offre $offre): RedirectResponse
     {
-        $offre->update($request->validated());
+        $offre->update($request->validated() + ['statut' => StatutOffre::EN_ATTENTE]);
+
+        // envoyer un mail à l'admin lors de la modification d'une offre
+        event(new OffreEditedEvent($offre));
 
         return to_route('offre.index')->with('message', 'Offre d\'emploi mise à jour avec succès.');
     }
@@ -127,13 +140,16 @@ class OffreController extends Controller
      */
     public function rejeterOffre(Offre $offre): RedirectResponse
     {
-        if (! auth()->user()->isAdministrator()) {
+        if (! $this->isAdmin) {
             abort(403, "Vous n'êtes pas autorisé à rejeter cette offre.");
         }
 
         // Rejeter l'offre
         $offre->update(['statut' => StatutOffre::REJETER]);
 
-        return redirect()->back()->with('message', 'Offre rejetée avec succès.');
+        // Dispatcher l'événement pour notifier le recruteur
+        event(new OffreRejectedEvent($offre));
+
+        return back()->with('message', 'Offre rejetée avec succès.');
     }
 }

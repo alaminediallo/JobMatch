@@ -3,14 +3,13 @@
 namespace App\Mail;
 
 use App\Models\Offre;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class OffreCreatedNotification extends Mailable
+class OffreRejectedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -27,13 +26,13 @@ class OffreCreatedNotification extends Mailable
      */
     public function envelope(): Envelope
     {
-        $adminEmail = User::whereRelation('role', 'name', 'Administrateur')->value('email');
+        $adminEmail = auth()->user()->email;
 
         return new Envelope(
-            from: $this->offre->user->email,
-            to: $adminEmail,
-            replyTo: $this->offre->user->email,
-            subject: "Nouvelle offre d'emploi créée",
+            from: $adminEmail,
+            to: $this->offre->user->email,
+            replyTo: $adminEmail,
+            subject: 'Votre offre a été rejetée',
         );
     }
 
@@ -43,9 +42,10 @@ class OffreCreatedNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            html: 'emails.offre.created',
+            html: 'emails.offres.rejected',
             with: [
-                'offre' => $this->offre,
+                'titreOffre' => $this->offre->title,
+                'nomRecruteur' => $this->offre->user->name,
             ]
         );
     }

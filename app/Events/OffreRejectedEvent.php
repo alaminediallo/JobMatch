@@ -6,7 +6,7 @@ use App\Models\Offre;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OffreCreated
+class OffreRejectedEvent
 {
     use Dispatchable, SerializesModels;
 

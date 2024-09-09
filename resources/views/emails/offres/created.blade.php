@@ -44,7 +44,6 @@
 
         .email-button {
             padding: 15px 24px;
-            text-align: center;
         }
 
         .email-button a {
@@ -100,9 +99,6 @@
     <div class="email-content" style="padding-top: 0;">
         <ul>
             <li><span>Titre :</span> {{ $offre->title }}</li>
-            <li><span>Salaire :</span> {{ $offre->salaire_proposer .  ' FCFA' }}</li>
-            <li><span>Date de début :</span> {{ $offre->date_debut->format('D d, M Y') }}</li>
-            <li><span>Date de fin :</span> {{ $offre->date_fin->format('D d, M Y') }}</li>
             <li><span>Nom de l'entreprise :</span> {{ $offre->user->nom_entreprise }}</li>
             <li><span>Type d'entreprise :</span> {{ $offre->user->typeEntreprise->name }}</li>
             <li><span>Nom complet du recruteur :</span> {{ $offre->user->name . ' ' . $offre->user->prenom }}</li>
@@ -112,7 +108,7 @@
 
     <!-- Button -->
     <div class="email-button">
-        <a href="{{ route('offre.show', $offre) }}">Voir l'offre</a>
+        <a href="{{ route('offre.show', $offre) }}">Consulter l'offre</a>
     </div>
 
     <!-- Footer -->
