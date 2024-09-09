@@ -15,6 +15,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    const ROLE_ADMINISTRATEUR = 'Administrateur';
+    const ROLE_RECRUTEUR = 'Recruteur';
+    const ROLE_CANDIDAT = 'Candidat';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,30 +49,19 @@ class User extends Authenticatable
     ];
 
     /**
-     * Vérifie si l'utilisateur a une permission spécifique via son rôle.
-     */
-    public function hasPermissionTo(string $permission): bool
-    {
-        // Vérifie si le rôle de l'utilisateur a la permission spécifiée
-        return $this->role()->whereHas('permissions', function ($query) use ($permission) {
-            $query->where('name', $permission);
-        })->exists();
-    }
-
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    /**
      * Vérifie si l'utilisateur est administrateur.
      */
     public function isAdministrator(): bool
     {
         // Vérifie si l'utilisateur possède un rôle nommé 'Administrateur'
         return Cache::rememberForever("user_{$this->id}_is_administrator", function () {
-            return $this->role()->where('name', 'Administrateur')->exists();
+            return $this->role()->where('name', self::ROLE_ADMINISTRATEUR)->exists();
         });
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 
     /**
@@ -78,7 +71,7 @@ class User extends Authenticatable
     {
         // Vérifie si l'utilisateur possède un rôle nommé 'Recruteur'
         return Cache::rememberForever("user_{$this->id}_is_recruteur", function () {
-            return $this->role()->where('name', 'Recruteur')->exists();
+            return $this->role()->where('name', self::ROLE_RECRUTEUR)->exists();
         });
     }
 
@@ -88,7 +81,7 @@ class User extends Authenticatable
     public function isCandidat(): bool
     {
         return Cache::rememberForever("user_{$this->id}_is_candidat", function () {
-            return $this->role()->where('name', 'Candidat')->exists();
+            return $this->role()->where('name', self::ROLE_CANDIDAT)->exists();
         });
     }
 
