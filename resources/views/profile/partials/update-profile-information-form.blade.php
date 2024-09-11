@@ -1,6 +1,6 @@
 <section>
     <header>
-        <p class="h4">
+        <p class="h4 mb-1">
             {{ __('Profile Information') }}
         </p>
 
@@ -41,7 +41,7 @@
             <x-input-error class="mt-2" :messages="$errors->get('email')"/>
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div class="mt-3">
+                <div class="mt-2">
                     <p class="text-muted">
                         {{ __('Your email address is unverified.') }}
 
@@ -107,7 +107,7 @@
             </div>
         @endif
 
-        <div class="d-flex align-items-center gap-3 mt-3">
+        <div class="d-flex align-items-center gap-3 mt-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
 

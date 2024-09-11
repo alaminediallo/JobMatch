@@ -52,35 +52,29 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user): View
+    public function show(User $user): View|RedirectResponse
     {
+        if ($user->id === auth()->id()) {
+            return to_route('user.edit', $user);
+        }
+
         return view('user.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user): View
+    public function edit(User $user): View|RedirectResponse
     {
+        if ($user->id === auth()->id()) {
+            return to_route('profile.edit', $user);
+        }
+
         return view('user.edit', [
             'user' => $user,
             'roles' => Role::all(),
             'typesEntreprise' => TypeEntreprise::all(),
         ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user): RedirectResponse
-    {
-        if ($user->id === auth()->id()) {
-            return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
-        }
-
-        $user->delete();
-
-        return back()->with('message', "L'utilisateur {$user->name} a été supprimé avec succès");
     }
 
     /**

@@ -1,16 +1,16 @@
-<section class="mb-4">
+<section>
     <header>
-        <h2 class="h4 text-dark">
+        <h2 class="h4 mb-1">
             {{ __('Delete Account') }}
         </h2>
 
-        <p class="mt-2 text-muted">
+        <p class="text-muted">
             {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
         </p>
     </header>
 
     <button
-        class="btn btn-danger"
+        class="btn btn-danger bg-red-600 text-white mt-3"
         x-data=""
         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
     >{{ __('Delete Account') }}</button>
@@ -48,7 +48,7 @@
                     {{ __('Cancel') }}
                 </button>
 
-                <button type="submit" class="btn btn-danger ms-2">
+                <button type="submit" class="btn btn-danger bg-red-600 text-white ms-2">
                     {{ __('Delete Account') }}
                 </button>
             </div>

@@ -1,15 +1,15 @@
 <section>
     <header>
-        <h2 class="h4 text-dark">
+        <h2 class="h4 mb-1">
             {{ __('Update Password') }}
         </h2>
 
-        <p class="mt-1 text-muted">
+        <p class="text-muted">
             {{ __('Ensure your account is using a long, random password to stay secure.') }}
         </p>
     </header>
 
-    <form method="post" action="{{ route('password.update') }}" class="mt-3">
+    <form method="post" action="{{ route('password.update') }}" class="mt-4">
         @csrf
         @method('put')
 
@@ -34,7 +34,7 @@
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2"/>
         </div>
 
-        <div class="d-flex align-items-center gap-3 mt-3">
+        <div class="d-flex align-items-center gap-3 mt-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'password-updated')
