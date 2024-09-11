@@ -14,7 +14,7 @@ Route::redirect('/', '/home');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/search', [HomeController::class, 'search'])->name('home.search');
 
-route::get('/mailable', function () {
+Route::get('/mailable', function () {
     $offre = App\Models\Offre::find(1);
 
     return new App\Mail\OffreCreatedMail($offre);
@@ -31,10 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('offre', OffreController::class)->except('show');
     Route::patch('/offres/{offre}/validate', [OffreController::class, 'validateOffre'])
         ->name('offre.validate');
-    route::patch('/offres/{offre}/rejeter', [OffreController::class, 'rejeterOffre'])
+    Route::patch('/offres/{offre}/rejeter', [OffreController::class, 'rejeterOffre'])
         ->name('offre.rejeter');
 
-    Route::resource('user', UsersController::class);
+    Route::resource('user', UsersController::class)->except('destroy');
     Route::patch('/users/{user}/activate', [UsersController::class, 'activate'])->name('user.activate');
     Route::patch('/users/{user}/deactivate', [UsersController::class, 'deactivate'])->name('user.deactivate');
 

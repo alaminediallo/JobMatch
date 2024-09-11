@@ -174,7 +174,7 @@
             const typeEntrepriseId = dynamicFieldsContainer.dataset.typeEntrepriseId
             const errors = JSON.parse(dynamicFieldsContainer.dataset.errors || '{}');
 
-            function createFormField({ type = 'text', name, label, placeholder, value = '', options = {} }) {
+            function createFormField({type = 'text', name, label, placeholder, value = '', options = {}}) {
                 const div = document.createElement('div')
                 div.classList.add('col-12', 'mb-4')
 
@@ -248,7 +248,7 @@
                         label: "Description de l'entreprise",
                         placeholder: "Entrez la description de l'entreprise",
                         value: descriptionEntreprise,
-                        options: { rows: 4 }
+                        options: {rows: 4}
                     })
                     const typeEntrepriseField = createFormField({
                         type: 'select',
@@ -256,17 +256,15 @@
                         label: "Type d'entreprise",
                         placeholder: "Sélectionnez le type d'entreprise",
                         value: typeEntrepriseId,
-                        options: { options: typesEntreprise }
-                    });
+                        options: {options: typesEntreprise}
+                    })
                     dynamicFieldsContainer.append(nomEntrepriseField, typeEntrepriseField, descriptionEntrepriseField)
                 }
 
                 // Initialisation de Select2 sur le nouveau champ select
                 setTimeout(() => {
-                    $('.js-select2').select2({
-                        width: '100%', // Vous pouvez ajuster selon vos besoins
-                    });
-                }, 100); // Ajout d'un délai pour s'assurer que le DOM est entièrement prêt
+                    $('.js-select2').select2({width: '100%'})
+                }, 100) // Ajout d'un délai pour s'assurer que le DOM est entièrement prêt
             }
 
             // Appel initial pour afficher les champs si nécessaire

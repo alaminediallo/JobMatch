@@ -23,6 +23,8 @@
     <!-- Dashmix framework -->
     <link rel="stylesheet" id="css-main" href="{{ asset('css/dashmix.min.css') }}">
     <link rel="stylesheet" id="css-main" href="{{ asset('css/style.css') }}">
+
+    @yield('tailwindcss-cdn')
 </head>
 
 <body>
@@ -76,7 +78,9 @@
     'sidebar-dark page-header-dark dark-mode'   Enable dark mode (light sidebar/header is not supported with dark mode)
 -->
 <div id="page-container" class="sidebar-o enable-page-overlay sidebar side-scroll page-header-dark
- page-header main-content-narrow">
+ page-header main-content-narrow
+{{-- dark-mode sidebar-dark--}}
+ ">
     <!-- Side Overlay-->
     @include('pages.overlay')
     <!-- END Side Overlay -->

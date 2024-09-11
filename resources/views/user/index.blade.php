@@ -60,7 +60,7 @@
                             </td>
                             <td>
                                 <span class="badge {{ $user->etat ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $user->etat ? 'Actif' : 'Inactif' }}
+                                    {{ $user->etat ? 'Actif' : 'Bloqué' }}
                                 </span>
                             </td>
 
@@ -79,12 +79,12 @@
                                             @csrf
                                             @method('PATCH')
                                             <a href="#" type="button" onclick="event.preventDefault();
-                                            if(confirm('Êtes-vous sûr de vouloir désactiver cet utilisateur ?')){
+                                            if(confirm('Êtes-vous sûr de vouloir bloquer cet utilisateur ?')){
                                             this.closest('form').submit();}"
                                                class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
-                                               data-bs-toggle="tooltip" aria-label="Désactiver"
-                                               data-bs-original-title="Désactiver" data-bs-placement="top">
-                                                <i class="fa fa-thumbs-down"></i>
+                                               data-bs-toggle="tooltip" aria-label="Bloquer"
+                                               data-bs-original-title="Bloquer" data-bs-placement="top">
+                                                <i class="fa fa-ban"></i>
                                             </a>
                                         </form>
                                     @else
@@ -102,7 +102,7 @@
                                         </form>
                                     @endif
 
-                                    @unless($user->etat)
+                                    {{--@unless($user->etat)
                                         <form action="{{ route('user.destroy', $user) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -115,7 +115,7 @@
                                                 <i class="fa fa-times"></i>
                                             </a>
                                         </form>
-                                    @endunless
+                                    @endunless--}}
                                 </div>
                             </td>
 
