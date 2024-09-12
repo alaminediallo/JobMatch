@@ -61,12 +61,12 @@
                                 <button type="submit" class="btn w-100 btn-lg btn-hero btn-primary mb-2">
                                     <i class="fa fa-fw fa-sign-in-alt opacity-50 me-1"></i> Se connecter
                                 </button>
-                                <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between">
+                                <p class="mt-3 mb-0 d-lg-flex justify-content-lg-between gap-lg-2">
                                     @if (Route::has('password.request'))
                                         <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1"
                                            href="{{ route('password.request') }} ">
-                                            <i class="fa fa-exclamation-triangle opacity-50 me-1"></i> Mot de passe
-                                            oublié ?
+                                            <i class="fa fa-exclamation-triangle opacity-50 me-1"></i>
+                                            Mot de passe oublié ?
                                         </a>
                                     @endif
                                     <a class="btn btn-sm btn-alt-secondary d-block d-lg-inline-block mb-1"

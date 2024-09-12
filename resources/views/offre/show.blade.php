@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <div class="bg-image" style="background-image: url('{{ asset('media/photos/photo12@2x.jpg')}}');">
+    <div class="bg-image" style="background-image: url('{{ asset('media/photos/photo12@2x.jpg') }}');">
         <div class="bg-black-75">
             <div class="content content-boxed content-full py-5">
                 <div class="row">
@@ -29,18 +29,27 @@
                                 </div>
                                 <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Salaire proposé
                                 </div>
-                                @if (! $offre->is_validated && $isAdmin)
-                                    <form action="{{ route('offre.validate', $offre) }}" method="POST">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-hero btn-primary">
-                                            <i class="fa fa-check opacity-50 me-1"></i> {{ __('Validate')}}
-                                        </button>
-                                    </form>
-                                @elseif (! auth()->check() || auth()->user()->isCandidat())
-                                    <span class="btn btn-hero btn-primary">
-                                        <i class="fa fa-arrow-right opacity-50 me-1"></i> {{ __('Apply')}}
-                                    </span>
+                                @if ($offre->date_fin > now())
+                                    @if (!$offre->is_validated && $isAdmin)
+                                        <form action="{{ route('offre.validate', $offre) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="btn btn-hero btn-primary">
+                                                <i class="fa fa-check opacity-50 me-1"></i> {{ __('Validate') }}
+                                            </button>
+                                        </form>
+                                    @elseif (! auth()->check() || auth()->user()->isCandidat())
+                                        @if (auth()->user()->candidatures->contains('offre_id', $offre->id))
+                                            <button class="btn btn-hero btn-secondary" disabled>
+                                                <i class="fa fa-check opacity-50 me-1"></i> {{ __('Déjà postulé') }}
+                                            </button>
+                                        @else
+                                            <button class="btn btn-hero btn-primary"
+                                                    href="{{ route('candidature.create', $offre) }}">
+                                                <i class="fa fa-arrow-right opacity-50 me-1"></i> {{ __('Apply') }}
+                                            </button>
+                                        @endif
+                                    @endif
                                 @endif
                             </div>
                         </a>
@@ -58,71 +67,73 @@
                 <!-- Job Summary -->
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">{{__('Job Summary')}}</h3>
+                        <h3 class="block-title">{{ __('Job Summary') }}</h3>
                     </div>
                     <div class="block-content">
                         <ul class="fa-ul list-icons">
                             <li>
-                      <span class="fa-li text-primary">
-                        <i class="fa fa-briefcase"></i>
-                      </span>
+                                <span class="fa-li text-primary">
+                                    <i class="fa fa-briefcase"></i>
+                                </span>
                                 <div class="fw-semibold">Type d'offre</div>
                                 <div class="text-muted">{{ $offre->type_offre }}</div>
                             </li>
                             <li>
-                      <span class="fa-li text-primary">
-                        <i class="fa fa-money-check-alt"></i>
-                      </span>
+                                <span class="fa-li text-primary">
+                                    <i class="fa fa-money-check-alt"></i>
+                                </span>
                                 <div class="fw-semibold">Salaire</div>
                                 <div class="text-muted">
                                     {{ number_format($offre->salaire_proposer, thousands_separator: ' ') . ' FCFA' }}
                                 </div>
                             </li>
                             <li>
-                      <span class="fa-li text-primary">
-                        <i class="fa fa-clock"></i>
-                      </span>
+                                <span class="fa-li text-primary">
+                                    <i class="fa fa-clock"></i>
+                                </span>
                                 <div class="fw-semibold">Date de publication</div>
                                 <div class="text-muted">{{ $offre->created_at->diffForHumans() }}</div>
                             </li>
                             <li>
-                      <span class="fa-li text-primary">
-                        <i class="fa fa-calendar-check"></i>
-                      </span>
+                                <span class="fa-li text-primary">
+                                    <i class="fa fa-calendar-check"></i>
+                                </span>
                                 <div class="fw-semibold">Date limite de candidature</div>
-                                <div class="text-muted">{{ $offre->date_fin->diffForHumans() }}</div>
+                                <div class="text-muted">
+                                    {{ $offre->date_fin > now() ? $offre->date_fin->diffForHumans() : 'Candidature fermée' }}
+                                </div>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <!-- END Job Summary -->
 
-                @if($isAdmin)
+                @if ($isAdmin)
                     <!-- Recruteur description -->
                     <div class="block block-rounded">
                         <div class="block-header block-header-default">
-                            <h3 class="block-title">{{__('Recruteur description')}}</h3>
+                            <h3 class="block-title">{{ __('Recruteur description') }}</h3>
                         </div>
                         <div class="block-content">
                             <ul class="fa-ul list-icons">
                                 <li>
-                      <span class="fa-li text-primary">
-                        <i class="fa fa-user"></i>
-                      </span>
+                                    <span class="fa-li text-primary">
+                                        <i class="fa fa-user"></i>
+                                    </span>
                                     <div class="fw-semibold">Nom complet</div>
                                     <div class="text-muted">{{ $offre->user->name . ' ' . $offre->user->prenom }}</div>
                                 </li>
                                 <li>
-                                  <span class="fa-li text-primary">
-                                    <i class="fa fa-envelope"></i>
-                                  </span>
+                                    <span class="fa-li text-primary">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
                                     <div class="fw-semibold">Email</div>
                                     <div class="text-muted">{{ $offre->user->email }}</div>
                                 </li>
                                 <li>
-                      <span class="fa-li text-primary">
-                        <i class="fa fa-phone"></i>
-                      </span>
+                                    <span class="fa-li text-primary">
+                                        <i class="fa fa-phone"></i>
+                                    </span>
                                     <div class="fw-semibold">Téléphone</div>
                                     <div class="text-muted">{{ $offre->user->tel }}</div>
                                 </li>
@@ -136,7 +147,7 @@
                 <!-- Job Description -->
                 <div class="block block-rounded">
                     <div class="block-header block-header-default">
-                        <h3 class="block-title">{{__('Job Description')}}</h3>
+                        <h3 class="block-title">{{ __('Job Description') }}</h3>
                     </div>
                     <div class="block-content">
                         <p>{{ $offre->description ?? 'Pas de description pour cette offre' }}</p>
@@ -151,8 +162,7 @@
                     </div>
                     <div class="block-content">
                         <div class="row">
-                            <div
-                                class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center justify-content-between">
                                 <div class="me-3">
                                     <div class="d-md-flex gap-md-2 align-items-center justify-content-between">
                                         <p class="fs-lg fw-semibold">
@@ -171,9 +181,9 @@
                         </div>
                         <ul class="fa-ul list-icons">
                             <li>
-                      <span class="fa-li text-primary">
-                        <i class="fa fa-map-marker-alt"></i>
-                      </span>
+                                <span class="fa-li text-primary">
+                                    <i class="fa fa-map-marker-alt"></i>
+                                </span>
                                 <div class="fw-semibold">Emplacement</div>
                                 <div class="text-muted">{{ $offre->user->adresse }}</div>
                             </li>

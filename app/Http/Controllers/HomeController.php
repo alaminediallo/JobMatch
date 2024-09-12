@@ -32,7 +32,7 @@ class HomeController extends Controller
         return Offre::with('category')
 //            ->validated()
             ->whereDate('date_debut', '<=', now())
-            ->whereDate('date_fin', '>=', now())
+            ->whereDate('date_fin', '>', now())
             ->when($searchTerm, function ($query, $searchTerm) {
                 $query->whereAny(['title', 'type_offre'], 'LIKE', '%'.$searchTerm.'%');
                 $query->OrwhereRelation('category', 'name', 'LIKE', '%'.$searchTerm.'%');

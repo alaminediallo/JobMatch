@@ -93,19 +93,21 @@
                                             </form>
                                         </div>
                                     @else
-                                        <a href="{{ route('offre.edit', $offre) }}"
-                                           class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"
-                                           data-bs-toggle="tooltip" aria-label="Modifier"
-                                           data-bs-original-title="Modifier">
-                                            <i class="fa fa-pencil-alt"></i>
-                                        </a>
-                                        {{--                                    <a href="{{ route('offre.candidatures', $offre) }}"--}}
-                                        <a href=""
-                                           class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
-                                           data-bs-toggle="tooltip" aria-label="Voir les candidatures"
-                                           data-bs-original-title="Voir les candidatures">
-                                            <i class="fa fa-users"></i>
-                                        </a>
+                                        @if($offre->candidatures_count <= 0)
+                                            <a href="{{ route('offre.edit', $offre) }}"
+                                               class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"
+                                               data-bs-toggle="tooltip" aria-label="Modifier"
+                                               data-bs-original-title="Modifier">
+                                                <i class="fa fa-pencil-alt"></i>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('offre.candidature.index', $offre) }}"
+                                               class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
+                                               data-bs-toggle="tooltip" aria-label="Voir les candidatures"
+                                               data-bs-original-title="Voir les candidatures">
+                                                <i class="fa fa-users"></i>
+                                            </a>
+                                        @endif
                                         <form action="{{ route('offre.destroy', $offre) }}" method="POST">
                                             @csrf
                                             @method('DELETE')

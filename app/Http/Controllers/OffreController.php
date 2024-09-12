@@ -20,7 +20,7 @@ class OffreController extends Controller
 
     public function __construct()
     {
-        $this->isAdmin = auth()->user()->isAdministrator() ?? false;
+        $this->isAdmin = auth()->user()?->isAdmin() ?? false;
     }
 
     /**
@@ -35,8 +35,10 @@ class OffreController extends Controller
             ]);
         }
 
+        $offres = Offre::withCount(['candidatures', 'user'])->where('user_id', auth()->id())->get();
+
         return view('offre.index', [
-            'offres' => auth()->user()->offres,
+            'offres' => $offres,
             'isAdmin' => $this->isAdmin,
         ]);
     }
@@ -84,8 +86,12 @@ class OffreController extends Controller
     /**
      * Affiche le formulaire d'édition pour une offre d'emploi spécifique.
      */
-    public function edit(Offre $offre): View
+    public function edit(Offre $offre): View|RedirectResponse
     {
+        if ($offre->candidatures()->exists()) {
+            return back()->with('error', 'Cette offre a déjà une candidature.');
+        }
+
         return view('offre.edit', [
             'offre' => $offre,
             'categories' => Category::all(),
@@ -98,7 +104,10 @@ class OffreController extends Controller
      */
     public function destroy(Offre $offre): RedirectResponse
     {
-        // TODO: Verifier que l'offre n'a pas de candidature
+        if ($offre->candidatures()->exists()) {
+            return back()->with('error', 'Cette offre a déjà une candidature.');
+        }
+
         $offre->delete();
 
         return to_route('offre.index')->with('message', 'Offre d\'emploi supprimée avec succès.');

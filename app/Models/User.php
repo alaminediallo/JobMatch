@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,13 +12,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    const ROLE_ADMINISTRATEUR = 'Administrateur';
-    const ROLE_RECRUTEUR = 'Recruteur';
-    const ROLE_CANDIDAT = 'Candidat';
+    public const ROLE_ADMINISTRATEUR = 'Administrateur';
+    public const ROLE_RECRUTEUR = 'Recruteur';
+    public const ROLE_CANDIDAT = 'Candidat';
 
     /**
      * The attributes that are mass assignable.
@@ -51,7 +52,7 @@ class User extends Authenticatable
     /**
      * Vérifie si l'utilisateur est administrateur.
      */
-    public function isAdministrator(): bool
+    public function isAdmin(): bool
     {
         // Vérifie si l'utilisateur possède un rôle nommé 'Administrateur'
         return Cache::rememberForever("user_{$this->id}_is_administrator", function () {
@@ -137,6 +138,14 @@ class User extends Authenticatable
     public function offres(): HasMany
     {
         return $this->hasMany(Offre::class);
+    }
+
+    /**
+     * Les candidatures de cet utilisateur.
+     */
+    public function candidatures(): HasMany
+    {
+        return $this->hasMany(Candidature::class);
     }
 
     /**

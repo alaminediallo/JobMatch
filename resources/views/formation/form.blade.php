@@ -87,6 +87,7 @@
                                 type="file"
                                 name="diplome"
                                 label="Diplôme (PDF)"
+                                accept=".pdf"
                                 :required="false"
                             />
 
