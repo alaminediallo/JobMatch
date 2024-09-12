@@ -71,6 +71,13 @@
                             Offres
                         </x-nav-link>
                     </li>
+                    <li class="nav-main-item">
+                        <x-nav-link :href="route('candidature.index')" :active="request()->routeIs('candidature.*')"
+                                    icon="briefcase">
+                            Candidatures
+                        </x-nav-link>
+                    </li>
+
                     <li class="nav-main-heading">Paramètres</li>
                     <li class="nav-main-item{{ request()->is('candidat/*') ? ' open' : '' }}">
                         <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"

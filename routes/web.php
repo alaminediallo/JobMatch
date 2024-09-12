@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\CompetenceController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\FormationController;
@@ -10,11 +11,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/home');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::get('/search', [HomeController::class, 'search'])->name('home.search');
+Route::redirect('/', 'home');
+Route::get('home', [HomeController::class, 'index'])->name('home');
+Route::get('search', [HomeController::class, 'search'])->name('home.search');
 
-Route::get('/mailable', function () {
+Route::get('mailable', function () {
     $offre = App\Models\Offre::find(1);
 
     return new App\Mail\OffreCreatedMail($offre);
@@ -29,20 +30,34 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('offre', OffreController::class)->except('show');
-    Route::patch('/offres/{offre}/validate', [OffreController::class, 'validateOffre'])
+    Route::patch('offres/{offre}/validate', [OffreController::class, 'validateOffre'])
         ->name('offre.validate');
-    Route::patch('/offres/{offre}/rejeter', [OffreController::class, 'rejeterOffre'])
+    Route::patch('offres/{offre}/rejeter', [OffreController::class, 'rejeterOffre'])
         ->name('offre.rejeter');
 
+    Route::get('offre/{offre}/postuler', [CandidatureController::class, 'create'])->name('candidature.create');
+    Route::post('offre/{offre}/postuler', [CandidatureController::class, 'store'])->name('candidature.store');
+
+    Route::get('offre/{offre}/candidatures', [CandidatureController::class, 'index'])->name('offre.candidature.index');
+    Route::get('candidatures', [CandidatureController::class, 'index'])->name('candidature.index');
+    Route::get('offre/{offre}/candidature/{candidature}',
+        [CandidatureController::class, 'show'])->name('candidature.show');
+
+    Route::patch('candidature/{candidature}/accepter',
+        [CandidatureController::class, 'accepter'])->name('candidature.accepter');
+
+    Route::patch('candidature/{candidature}/rejeter',
+        [CandidatureController::class, 'rejeter'])->name('candidature.rejeter');
+
     Route::resource('user', UsersController::class)->except('destroy');
-    Route::patch('/users/{user}/activate', [UsersController::class, 'activate'])->name('user.activate');
-    Route::patch('/users/{user}/deactivate', [UsersController::class, 'deactivate'])->name('user.deactivate');
+    Route::patch('users/{user}/activate', [UsersController::class, 'activate'])->name('user.activate');
+    Route::patch('users/{user}/deactivate', [UsersController::class, 'deactivate'])->name('user.deactivate');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/offre/{offre}', [OffreController::class, 'show'])->name('offre.show');
+Route::get('offre/{offre}', [OffreController::class, 'show'])->name('offre.show');
 
 require __DIR__.'/auth.php';
