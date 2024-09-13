@@ -86,6 +86,14 @@
                         </li>
                     @endcan
 
+                    <li class="nav-main-item">
+                        <x-nav-link :href="route('profile.edit')"
+                                    :active="request()->routeIs('profile.*')"
+                                    icon="user">
+                            Profile
+                        </x-nav-link>
+                    </li>
+
                     @can('view-candidat-settings')
                         <li class="nav-main-heading">Paramètres</li>
                         <li class="nav-main-item{{ request()->is('candidat/*') ? ' open' : '' }}">
@@ -128,6 +136,16 @@
                             </ul>
                         </li>
                     @endcan
+                    <li class="nav-main-item">
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <x-nav-link :href="route('logout')"
+                                        onclick="event.preventDefault();this.closest('form').submit();"
+                                        icon="arrow-alt-circle-left">
+                                Sign Out
+                            </x-nav-link>
+                        </form>
+                    </li>
                 @endauth
 
                 @guest

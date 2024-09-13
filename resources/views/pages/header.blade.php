@@ -23,44 +23,14 @@
         <!-- Right Section -->
         <div class="space-x-1">
             <!-- User Dropdown -->
-            <div class="dropdown d-inline-block">
-                @auth
-                    <button type="button" class="btn btn-alt-secondary" id="page-header-user-dropdown"
-                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-fw fa-user d-sm-none"></i>
-                        <span class="d-none d-sm-inline-block"
-                        >{{ Auth::user()->name . ' ' . (Auth::user()->prenom) ?? '' }}</span>
-                        <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>
-                    </button>
-                @endauth
-                <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="page-header-user-dropdown">
-                    {{-- <div class="bg-primary-dark rounded-top fw-semibold text-white text-center p-3">
-                         User Options
-                     </div>--}}
-                    <div class="p-2">
-                        <a class="dropdown-item" href={{ route('profile.edit') }}>
-                            <i class="far fa-fw fa-user me-1"></i> Profile
-                        </a>
-
-                        <!-- Toggle Side Overlay -->
-                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                        {{--<a class="dropdown-item" href="javascript:void(0)" data-toggle="layout"
-                           data-action="side_overlay_toggle">
-                            <i class="far fa-fw fa-building me-1"></i> Settings
-                        </a>--}}
-                        <!-- END Side Overlay -->
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();this.closest('form').submit();">
-                                <i class="far fa-fw fa-arrow-alt-circle-left me-1"></i> Sign Out
-                            </a>
-                        </form>
-                    </div>
+            @auth
+                <div class="btn btn-alt-secondary">
+                    <i class="fa fa-fw fa-user d-sm-none"></i>
+                    <span class="d-none d-sm-inline-block"
+                    >{{ Auth::user()->name . ' ' . (Auth::user()->prenom) ?? '' }}</span>
+                    {{--                        <i class="fa fa-fw fa-angle-down opacity-50 ms-1 d-none d-sm-inline-block"></i>--}}
                 </div>
-            </div>
+            @endauth
             <!-- END User Dropdown -->
 
             <!-- Notifications Dropdown -->

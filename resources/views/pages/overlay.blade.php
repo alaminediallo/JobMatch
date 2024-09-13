@@ -11,8 +11,14 @@
 
                 <!-- User Info -->
                 <div class="ms-2">
-                    <a class="text-white fw-semibold" href="javascript:void(0)">George Taylor</a>
-                    {{--                    <div class="text-white-75 fs-sm">Full Stack Developer</div>--}}
+                    @auth
+                        <a class="text-white fw-semibold"
+                           href="javascript:void(0)">{{ Auth::user()->name . ' ' . (Auth::user()->prenom) ?? '' }}</a>
+                        <div class="text-white-75 fs-sm">{{ Auth::user()->role->name }}</div>
+                    @endauth
+                    @guest
+                        <a class="text-white fw-semibold" href="javascript:void(0)">Invité</a>
+                    @endguest
                 </div>
                 <!-- END User Info -->
 
