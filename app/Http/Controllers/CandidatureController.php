@@ -24,9 +24,6 @@ class CandidatureController extends Controller
         } elseif ($user->isCandidat()) {
             // Récupérer les candidatures du candidat connecté
             $candidatures = $user->candidatures()->get();
-        } elseif ($user->isAdmin()) {
-            // Les administrateurs peuvent tout voir
-            $candidatures = Candidature::all();
         } else {
             abort(403); // Accès non autorisé
         }
@@ -36,42 +33,34 @@ class CandidatureController extends Controller
 
     public function accepter(Candidature $candidature): RedirectResponse
     {
+        $this->authorize('update', $candidature);
+
         $candidature->update(['statut' => StatutCandidature::ACCEPTER]);
 
-        // Envoyer un email au candidat pour l'informer de l'acceptation
+        // todo : Envoyer un email au candidat pour l'informer de l'acceptation
         // Mail::to($candidature->user->email)->send(new CandidatureAcceptee($candidature));
 
-        return to_route('candidature.index', $candidature->offre)
+        return to_route('offre.candidature.index', $candidature->offre)
             ->with('message', 'Candidature acceptée avec succès.');
     }
 
-    /*    public function update(CandidatureRequest $request, Candidature $candidature): RedirectResponse
-        {
-            $data = $request->validated();
-
-            // Gestion des fichiers (lettre de motivation et CV)
-            $data['lettre_motivation'] = $this->handleUploadedFile($request, 'lettre_motivation', 'candidatures',
-                $candidature->lettre_motivation);
-            $data['cv'] = $this->handleUploadedFile($request, 'cv', 'candidatures', $candidature->cv);
-
-            $candidature->update($data);
-
-            return to_route('candidature.index')->with('message', 'Candidature modifiée avec succès');
-        }*/
-
     public function rejeter(Candidature $candidature): RedirectResponse
     {
+        $this->authorize('update', $candidature);
+
         $candidature->update(['statut' => StatutCandidature::REJETER]);
 
-        // Envoyer un email au candidat pour l'informer du rejet
+        // todo : Envoyer un email au candidat pour l'informer du rejet
         // Mail::to($candidature->user->email)->send(new CandidatureRejetee($candidature));
 
-        return to_route('candidature.index', $candidature->offre)
+        return to_route('offre.candidature.index', $candidature->offre)
             ->with('message', 'Candidature rejetée avec succès.');
     }
 
     public function store(CandidatureRequest $request, Offre $offre): RedirectResponse
     {
+        $this->authorize('create', Candidature::class);
+
         $data = $request->validated();
 
         // Gestion des fichiers (lettre de motivation et CV)
@@ -86,6 +75,8 @@ class CandidatureController extends Controller
 
     public function create(Offre $offre): View
     {
+        $this->authorize('create', Candidature::class);
+
         return view('candidature.add', compact('offre'));
     }
 
@@ -95,10 +86,9 @@ class CandidatureController extends Controller
     public function show(Offre $offre, Candidature $candidature): View
     {
         // Autoriser l'accès à la candidature en fonction des policies
-        // $this->authorize('view', $candidature);
+        $this->authorize('view', $candidature);
 
         // Récupérer toutes les informations du candidat lié à cette candidature
-
         $candidat = User::with(['langues', 'competences', 'experiences', 'formations'])
             ->find($candidature->user_id, ['id', 'name', 'prenom', 'email', 'tel', 'adresse']);
 

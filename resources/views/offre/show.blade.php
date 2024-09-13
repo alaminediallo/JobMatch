@@ -1,4 +1,5 @@
 @extends('layouts.backend')
+@use("App\Enums\StatutOffre")
 
 @section('content')
     <!-- Hero Section -->
@@ -23,14 +24,15 @@
                     <div class="col-md-4 d-flex align-items-center">
                         <a class="block block-rounded block-link-shadow block-transparent bg-black-50
                         text-center mb-0 mx-auto">
-                            <div class="block-content block-content-full px-5 py-4">
+                            <div class="block-content block-content-full px-5 py-4 text-center">
                                 <div class="fs-2 fw-semibold text-white">
                                     {{ Number::abbreviate($offre->salaire_proposer) . ' FCFA' }}
                                 </div>
                                 <div class="fs-sm fw-semibold text-uppercase text-white-50 mt-1 push">Salaire proposé
                                 </div>
                                 @if ($offre->date_fin > now())
-                                    @if (!$offre->is_validated && $isAdmin)
+                                    @if ($isAdmin && $offre->statut !== StatutOffre::VALIDER)
+                                        <!-- Bouton pour que l'admin valide l'offre si elle n'est pas encore validée -->
                                         <form action="{{ route('offre.validate', $offre) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
@@ -38,18 +40,34 @@
                                                 <i class="fa fa-check opacity-50 me-1"></i> {{ __('Validate') }}
                                             </button>
                                         </form>
-                                    @elseif (! auth()->check() || auth()->user()->isCandidat())
-                                        @if (auth()->user()->candidatures->contains('offre_id', $offre->id))
-                                            <button class="btn btn-hero btn-secondary" disabled>
-                                                <i class="fa fa-check opacity-50 me-1"></i> {{ __('Déjà postulé') }}
-                                            </button>
+                                    @elseif ($offre->statut === StatutOffre::VALIDER)
+                                        <!-- Cas où l'utilisateur est connecté -->
+                                        @if (auth()->check() && auth()->user()->isCandidat())
+                                            <!-- Vérifie si l'utilisateur a déjà postulé à cette offre -->
+                                            @if (auth()->user()->candidatures->contains('offre_id', $offre->id))
+                                                <!-- Bouton désactivé si le candidat a déjà postulé -->
+                                                <button class="btn btn-hero btn-secondary" disabled>
+                                                    <i class="fa fa-check opacity-50 me-1"></i> {{ __('Déjà postulé') }}
+                                                </button>
+                                            @else
+                                                <!-- Lien pour postuler si l'utilisateur n'a pas encore postulé -->
+                                                <a href="{{ route('candidature.create', $offre) }}"
+                                                   class="btn btn-hero btn-primary">
+                                                    <i class="fa fa-arrow-right opacity-50 me-1"></i> {{ __('Postuler') }}
+                                                </a>
+                                            @endif
                                         @else
-                                            <button class="btn btn-hero btn-primary"
-                                                    href="{{ route('candidature.create', $offre) }}">
-                                                <i class="fa fa-arrow-right opacity-50 me-1"></i> {{ __('Apply') }}
-                                            </button>
+                                            <!-- Cas où l'utilisateur n'est pas connecté -->
+                                            <a href="{{ route('candidature.create', $offre) }}"
+                                               class="btn btn-hero btn-primary">
+                                                <i class="fa fa-arrow-right opacity-50 me-1"></i> {{ __('Postuler') }}
+                                            </a>
                                         @endif
                                     @endif
+                                @else
+                                    <button class="btn btn-hero btn-secondary" disabled>
+                                        <i class="fa fa-check opacity-50 me-1"></i> Offre à expiré
+                                    </button>
                                 @endif
                             </div>
                         </a>

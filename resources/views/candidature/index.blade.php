@@ -38,6 +38,9 @@
                             <th>Lettre de motivation</th>
                             <th>CV</th>
                             <th>Statut</th>
+                            @unless($isRecruteur)
+                                <th>Action</th>
+                            @endunless
                         </tr>
                         </thead>
                         <tbody>
@@ -50,7 +53,7 @@
                                             {{ $candidature->user->name . ' ' . $candidature->user->prenom }}
                                         </a>
                                     @else
-                                        <a href="{{ route('candidature.show', [$candidature->offre, $candidature]) }}"
+                                        <a href="{{ route('offre.show', $candidature->offre) }}"
                                            class="text-primary link-fx">
                                             {{ $candidature->offre->title }}
                                         </a>
@@ -72,6 +75,16 @@
                                         {{ $candidature->statut->value }}
                                     </span>
                                 </td>
+                                @unless($isRecruteur)
+                                    <td class="text-center">
+                                        <a href="{{ route('candidature.show', [$candidature->offre, $candidature]) }}"
+                                           class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
+                                           data-bs-toggle="tooltip" aria-label="Voir votre candidature"
+                                           data-bs-original-title="Voir votre candidature">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                @endunless
                             </tr>
                         @endforeach
                         </tbody>

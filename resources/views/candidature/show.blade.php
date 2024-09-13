@@ -1,11 +1,17 @@
 @extends('layouts.backend')
 
+@use("App\Enums\StatutCandidature")
+
 @php
     $isRecruteur = auth()->user()->isRecruteur() ?? false;
 @endphp
 
 @section('content')
     <!-- Hero Section -->
+    <!-- Affichage des messages de succès ou d'erreur -->
+    <x-alert type="success" session-name="message"/>
+    <x-alert type="danger" session-name="error"/>
+
     <div class="bg-image" style="background-image: url('{{ asset('media/photos/photo21@2x.jpg') }}');">
         <div class="bg-black-75">
             <div class="content content-boxed content-full py-5">
@@ -23,12 +29,31 @@
                             </h2>
                         </div>
                     </div>
-                    @if($isRecruteur)
-                        {{--
-                        // Todo : Ajouter les actions (accepter/refuser) pour les candidatures
-                        // todo : le statut c'est pour le candidat qui vient pour voir le statut de la candidature
-                        --}}
+                    @if($isRecruteur && $candidature->statut === StatutCandidature::EN_COURS)
+                        <!-- Actions pour recruteur (Accepter/Refuser) -->
+                        <div class="col-md-4 d-flex align-items-center justify-content-end">
+                            <div class="w-100 text-center text-md-start">
+                                <form action="{{ route('candidature.accepter', $candidature) }}" method="POST"
+                                      class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fa fa-check opacity-50 me-1"></i> Accepter
+                                    </button>
+                                </form>
+
+                                <form action="{{ route('candidature.rejeter', $candidature) }}" method="POST"
+                                      class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fa fa-times opacity-50 me-1"></i> Rejeter
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     @else
+                        <!-- Affichage du statut pour le candidat -->
                         <div class="col-md-4 d-flex align-items-center justify-content-end">
                             <div class="w-100 text-center text-md-start">
                                 <h2 class="h4 fs-sm text-uppercase fw-semibold text-white-75">
@@ -43,6 +68,7 @@
     </div>
     <!-- END Hero Section -->
 
+
     <!-- Page Content -->
     <div class="content content-boxed">
         <!-- Block Tabs Animated Fade -->
@@ -55,16 +81,10 @@
                                 aria-controls="btabs-animated-fade-info" aria-selected="true">Info du candidat
                         </button>
                     </li>
-                @else
-                    <li class="nav-item">
-                        <button class="nav-link active" id="btabs-animated-fade-info-tab" data-bs-toggle="tab"
-                                data-bs-target="#btabs-animated-fade-info" role="tab"
-                                aria-controls="btabs-animated-fade-info" aria-selected="true">Recruteur
-                        </button>
-                    </li>
                 @endif
-                <li class="nav-item">
-                    <button class="nav-link" id="btabs-animated-fade-cv-tab" data-bs-toggle="tab"
+                <li class="nav-item ">
+                    <button class="nav-link {{ $isRecruteur ? '' : 'active' }}" id="btabs-animated-fade-cv-tab"
+                            data-bs-toggle="tab"
                             data-bs-target="#btabs-animated-fade-cv" role="tab"
                             aria-controls="btabs-animated-fade-cv" aria-selected="false">CV
                     </button>
@@ -137,51 +157,11 @@
                             </li>
                         </ul>
                     </div>
-                @else
-                    <div class="tab-pane fade show active" id="btabs-animated-fade-info" role="tabpanel"
-                         aria-labelledby="btabs-animated-fade-info-tab" tabindex="0">
-                        <ul class="fa-ul list-icons">
-                            <li>
-                            <span class="fa-li text-primary">
-                                <i class="fa fa-user"></i>
-                            </span>
-                                <div class="fw-semibold">Nom du recruteur</div>
-                                <div class="text-muted">{{ $offre->user->name }} {{ $offre->user->prenom }}</div>
-                            </li>
-                            <li>
-                            <span class="fa-li text-primary">
-                                <i class="fa fa-envelope"></i>
-                            </span>
-                                <div class="fw-semibold">Email</div>
-                                <div class="text-muted">{{ $offre->user->email }}</div>
-                            </li>
-                            <li>
-                            <span class="fa-li text-primary">
-                                <i class="fa fa-phone"></i>
-                            </span>
-                                <div class="fw-semibold">Téléphone</div>
-                                <div class="text-muted">{{ $offre->user->tel }}</div>
-                            </li>
-                            <li>
-                            <span class="fa-li text-primary">
-                                <i class="fa fa-map-marker-alt"></i>
-                            </span>
-                                <div class="fw-semibold">Adresse</div>
-                                <div class="text-muted">{{ $offre->user->adresse }}</div>
-                            </li>
-                            <li>
-                            <span class="fa-li text-primary">
-                                <i class="fa fa-building"></i>
-                            </span>
-                                <div class="fw-semibold">Entreprise</div>
-                                <div class="text-muted">{{ $offre->user->nom_entreprise }}</div>
-                            </li>
-                        </ul>
-                    </div>
                 @endif
 
                 <!-- CV -->
-                <div class="tab-pane fade" id="btabs-animated-fade-cv" role="tabpanel"
+                <div class="tab-pane fade {{ $isRecruteur ? '' : 'show active' }}" id="btabs-animated-fade-cv"
+                     role="tabpanel"
                      aria-labelledby="btabs-animated-fade-cv-tab" tabindex="0">
                     <embed src="{{ Storage::url($candidature->cv) }}" type="application/pdf" width="100%"
                            height="500px"/>

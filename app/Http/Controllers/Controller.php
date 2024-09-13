@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 abstract class Controller
 {
+    use AuthorizesRequests;
+
     /**
      * Gérer l'upload d'un fichier et le remplacement de l'ancien fichier si nécessaire.
      */

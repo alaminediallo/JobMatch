@@ -10,15 +10,12 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Cache;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
-    public function __construct()
-    {
-        //        $this->authorizeResource(User::class, 'user');
-    }
-
     public function index(): View
     {
+        $this->authorize('viewAny', User::class);
+
         $users = User::with('role')
             ->where('id', '!=', auth()->id())
             ->get();
@@ -31,6 +28,8 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
+        $this->authorize('create', User::class);
+
         $user = User::create($request->validated());
 
         return to_route('user.index')
@@ -42,6 +41,8 @@ class UsersController extends Controller
      */
     public function create(): View
     {
+        $this->authorize('create', User::class);
+
         return view('user.add', [
             'user' => new User,
             'roles' => Role::all(),
@@ -54,8 +55,10 @@ class UsersController extends Controller
      */
     public function show(User $user): View|RedirectResponse
     {
+        $this->authorize('view', User::class);
+
         if ($user->id === auth()->id()) {
-            return to_route('user.edit', $user);
+            return to_route('profile.edit', $user);
         }
 
         return view('user.show', compact('user'));
@@ -66,6 +69,8 @@ class UsersController extends Controller
      */
     public function edit(User $user): View|RedirectResponse
     {
+        $this->authorize('update', User::class);
+
         if ($user->id === auth()->id()) {
             return to_route('profile.edit', $user);
         }
@@ -82,9 +87,11 @@ class UsersController extends Controller
      */
     public function activate(User $user): RedirectResponse
     {
+        $this->authorize('update', User::class);
+
         $user->update(['etat' => true]);
 
-        return redirect()->route('user.index')->with('message', "L'utilisateur a été activé avec succès.");
+        return to_route('user.index')->with('message', "L'utilisateur a été activé avec succès.");
     }
 
     /**
@@ -92,6 +99,8 @@ class UsersController extends Controller
      */
     public function update(UserRequest $request, User $user): RedirectResponse
     {
+        $this->authorize('update', User::class);
+
         $user->update($request->validated());
 
         if ($user->isDirty('role_id')) {
@@ -105,12 +114,14 @@ class UsersController extends Controller
     }
 
     /**
-     * Désactiver un utilisateur.
+     * Bloquer un utilisateur.
      */
     public function deactivate(User $user): RedirectResponse
     {
+        $this->authorize('update', User::class);
+
         $user->update(['etat' => false]);
 
-        return redirect()->route('user.index')->with('message', "L'utilisateur a été désactivé avec succès.");
+        return to_route('user.index')->with('message', "L'utilisateur a été désactivé avec succès.");
     }
 }

@@ -28,6 +28,8 @@ class OffreController extends Controller
      */
     public function index(): View
     {
+        $this->authorize('viewAny', Offre::class);
+
         if ($this->isAdmin) {
             return view('offre.index', [
                 'offres' => Offre::with('user')->whereStatut(StatutOffre::EN_ATTENTE)->get(),
@@ -48,6 +50,8 @@ class OffreController extends Controller
      */
     public function store(OffreRequest $request): RedirectResponse
     {
+        $this->authorize('create', Offre::class);
+
         $offre = $request->user()->offres()->create($request->validated());
 
         // envoyer un mail à l'admin lors de la création d'une offre
@@ -61,6 +65,8 @@ class OffreController extends Controller
      */
     public function create(): View|RedirectResponse
     {
+        $this->authorize('create', Offre::class);
+
         if (is_null(auth()->user()->type_entreprise_id)) {
             return to_route('profile.edit');
         }
@@ -88,6 +94,8 @@ class OffreController extends Controller
      */
     public function edit(Offre $offre): View|RedirectResponse
     {
+        $this->authorize('update', $offre);
+
         if ($offre->candidatures()->exists()) {
             return back()->with('error', 'Cette offre a déjà une candidature.');
         }
@@ -104,6 +112,8 @@ class OffreController extends Controller
      */
     public function destroy(Offre $offre): RedirectResponse
     {
+        $this->authorize('delete', $offre);
+
         if ($offre->candidatures()->exists()) {
             return back()->with('error', 'Cette offre a déjà une candidature.');
         }
@@ -136,6 +146,8 @@ class OffreController extends Controller
      */
     public function update(OffreRequest $request, Offre $offre): RedirectResponse
     {
+        $this->authorize('update', $offre);
+
         $offre->update($request->validated() + ['statut' => StatutOffre::EN_ATTENTE]);
 
         // envoyer un mail à l'admin lors de la modification d'une offre

@@ -13,7 +13,7 @@ class CandidaturePolicy
     /**
      * Détermine si l'utilisateur peut voir la candidature.
      * Recruteurs : Seulement leurs candidatures.
-     * Candidats : Seulement leurs propres candidatures.
+     * Candidats : Uniquement leurs propres candidatures.
      */
     public function view(User $user, Candidature $candidature): bool
     {
@@ -34,17 +34,19 @@ class CandidaturePolicy
         return false; // Par défaut, aucun accès
     }
 
-    /*   public function create(User $user): bool
-       {
-       }*/
+    public function viewAllCandidatures(User $user): bool
+    {
+        return $user->isCandidat();
+    }
 
-    /**
-     * Détermine si l'utilisateur peut mettre à jour la candidature.
-     * Recruteurs : Peuvent accepter/refuser les candidatures.
-     */
+    public function create(User $user): bool
+    {
+        return $user->isCandidat();
+    }
+
     public function update(User $user, Candidature $candidature): bool
     {
-        return $user->isRecruteur() && $candidature->offre->user_id === $user->id;
+        return $candidature->offre->user_id === $user->id;
     }
 
     /**
@@ -55,5 +57,4 @@ class CandidaturePolicy
     {
         return $user->isAdmin();
     }
-
 }
