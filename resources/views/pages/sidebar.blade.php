@@ -59,65 +59,75 @@
                 </li>
 
                 @auth
-                    <li class="nav-main-item">
-                        <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')"
-                                    icon="user">
-                            Utilisateur
-                        </x-nav-link>
-                    </li>
-                    <li class="nav-main-item">
-                        <x-nav-link :href="route('offre.index')" :active="request()->routeIs('offre.*')"
-                                    icon="briefcase">
-                            Offres
-                        </x-nav-link>
-                    </li>
-                    <li class="nav-main-item">
-                        <x-nav-link :href="route('candidature.index')" :active="request()->routeIs('candidature.*')"
-                                    icon="briefcase">
-                            Candidatures
-                        </x-nav-link>
-                    </li>
+                    @can('viewAny', App\Models\User::class)
+                        <li class="nav-main-item">
+                            <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')"
+                                        icon="user">
+                                Utilisateur
+                            </x-nav-link>
+                        </li>
+                    @endcan
 
-                    <li class="nav-main-heading">Paramètres</li>
-                    <li class="nav-main-item{{ request()->is('candidat/*') ? ' open' : '' }}">
-                        <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
-                           aria-expanded="true" href="#">
-                            <i class="nav-main-link-icon fa fa-wrench"></i>
-                            <span class="nav-main-link-name">Candidat</span>
-                        </a>
-                        <ul class="nav-main-submenu">
-                            <li class="nav-main-item">
-                                <a class="nav-main-link{{ request()->routeIs('langue.*') ? ' active' : '' }}"
-                                   href="{{ route('langue.index') }}">
-                                    <span class="nav-main-link-name">Langue</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="nav-main-submenu">
-                            <li class="nav-main-item">
-                                <a class="nav-main-link{{ request()->routeIs('competence.*') ? ' active' : '' }}"
-                                   href="{{ route('competence.index') }}">
-                                    <span class="nav-main-link-name">Competence</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="nav-main-submenu">
-                            <li class="nav-main-item">
-                                <a class="nav-main-link{{ request()->routeIs('experience.*') ? ' active' : '' }}"
-                                   href="{{ route('experience.index') }}">
-                                    <span class="nav-main-link-name">Experience</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="nav-main-submenu">
-                            <li class="nav-main-item">
-                                <a class="nav-main-link{{ request()->routeIs('formation.*') ? ' active' : '' }}"
-                                   href="{{ route('formation.index') }}">
-                                    <span class="nav-main-link-name">Formation</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    @can('viewAny', App\Models\Offre::class)
+                        <li class="nav-main-item">
+                            <x-nav-link :href="route('offre.index')" :active="request()->routeIs('offre.*')"
+                                        icon="briefcase">
+                                Offres
+                            </x-nav-link>
+                        </li>
+                    @endcan
+
+                    @can('viewAllCandidatures', App\Models\Candidature::class)
+                        <li class="nav-main-item">
+                            <x-nav-link :href="route('candidature.index')" :active="request()->routeIs('candidature.*')"
+                                        icon="briefcase">
+                                Candidatures
+                            </x-nav-link>
+                        </li>
+                    @endcan
+
+                    @can('view-candidat-settings')
+                        <li class="nav-main-heading">Paramètres</li>
+                        <li class="nav-main-item{{ request()->is('candidat/*') ? ' open' : '' }}">
+                            <a class="nav-main-link nav-main-link-submenu" data-toggle="submenu" aria-haspopup="true"
+                               aria-expanded="true" href="#">
+                                <i class="nav-main-link-icon fa fa-wrench"></i>
+                                <span class="nav-main-link-name">Candidat</span>
+                            </a>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->routeIs('langue.*') ? ' active' : '' }}"
+                                       href="{{ route('langue.index') }}">
+                                        <span class="nav-main-link-name">Langue</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->routeIs('competence.*') ? ' active' : '' }}"
+                                       href="{{ route('competence.index') }}">
+                                        <span class="nav-main-link-name">Competence</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->routeIs('experience.*') ? ' active' : '' }}"
+                                       href="{{ route('experience.index') }}">
+                                        <span class="nav-main-link-name">Experience</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav-main-submenu">
+                                <li class="nav-main-item">
+                                    <a class="nav-main-link{{ request()->routeIs('formation.*') ? ' active' : '' }}"
+                                       href="{{ route('formation.index') }}">
+                                        <span class="nav-main-link-name">Formation</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endcan
                 @endauth
 
                 @guest
