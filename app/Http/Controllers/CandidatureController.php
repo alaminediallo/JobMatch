@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Enums\StatutCandidature;
 use App\Http\Requests\CandidatureRequest;
+use App\Mail\CandidatureAcceptedMail;
+use App\Mail\CandidatureRejectedMail;
+use App\Mail\CandidatureSubmittedMail;
 use App\Models\Candidature;
 use App\Models\Offre;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class CandidatureController extends Controller
@@ -17,9 +21,14 @@ class CandidatureController extends Controller
         $user = auth()->user();
 
         if ($user->isRecruteur()) {
-            // Récupérer les candidatures liées aux offres du recruteur
-            $candidatures = Candidature::whereHas('offre', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+            // Vérifier que l'utilisateur est bien le propriétaire de l'offre
+            abort_if($user->id !== $offre->user_id, 403,
+                "Vous n'êtes pas autorisé à voir les candidatures de cette offre.");
+
+            // Récupérer toutes les candidatures liées à cette offre
+            $candidatures = Candidature::whereHas('offre', function ($query) use ($user, $offre) {
+                $query->where('id', $offre->id)
+                    ->where('user_id', $user->id);
             })->get();
         } elseif ($user->isCandidat()) {
             // Récupérer les candidatures du candidat connecté
@@ -27,38 +36,45 @@ class CandidatureController extends Controller
         } else {
             abort(403); // Accès non autorisé
         }
+        // Charger les relations
+        $candidatures->load(['offre', 'user']);
 
         return view('candidature.index', compact('candidatures', 'offre'));
     }
 
-    public function accepter(Candidature $candidature): RedirectResponse
-    {
+    public
+    function accepter(
+        Candidature $candidature
+    ): RedirectResponse {
         $this->authorize('update', $candidature);
 
         $candidature->update(['statut' => StatutCandidature::ACCEPTER]);
 
-        // todo : Envoyer un email au candidat pour l'informer de l'acceptation
-        // Mail::to($candidature->user->email)->send(new CandidatureAcceptee($candidature));
+        Mail::to($candidature->user->email)->send(new CandidatureAcceptedMail($candidature));
 
         return to_route('offre.candidature.index', $candidature->offre)
             ->with('message', 'Candidature acceptée avec succès.');
     }
 
-    public function rejeter(Candidature $candidature): RedirectResponse
-    {
+    public
+    function rejeter(
+        Candidature $candidature
+    ): RedirectResponse {
         $this->authorize('update', $candidature);
 
         $candidature->update(['statut' => StatutCandidature::REJETER]);
 
-        // todo : Envoyer un email au candidat pour l'informer du rejet
-        // Mail::to($candidature->user->email)->send(new CandidatureRejetee($candidature));
+        Mail::to($candidature->user->email)->send(new CandidatureRejectedMail($candidature));
 
         return to_route('offre.candidature.index', $candidature->offre)
             ->with('message', 'Candidature rejetée avec succès.');
     }
 
-    public function store(CandidatureRequest $request, Offre $offre): RedirectResponse
-    {
+    public
+    function store(
+        CandidatureRequest $request,
+        Offre $offre
+    ): RedirectResponse {
         $this->authorize('create', Candidature::class);
 
         $data = $request->validated();
@@ -68,13 +84,19 @@ class CandidatureController extends Controller
         $data['cv'] = $this->handleUploadedFile($request, 'cv', 'candidatures');
         $data['offre_id'] = $offre->id;
 
-        $request->user()->candidatures()->create($data);
+        $candidature = $request->user()->candidatures()->create($data);
+
+        // Envoyer un email au recruteur lié à l'offre
+        Mail::to($offre->user->email)
+            ->send(new CandidatureSubmittedMail($candidature, $offre));
 
         return to_route('candidature.index')->with('message', 'Candidature créée avec succès');
     }
 
-    public function create(Offre $offre): View
-    {
+    public
+    function create(
+        Offre $offre
+    ): View {
         $this->authorize('create', Candidature::class);
 
         return view('candidature.add', compact('offre'));
@@ -83,8 +105,11 @@ class CandidatureController extends Controller
     /**
      * Afficher les détails d'une candidature et les informations du candidat.
      */
-    public function show(Offre $offre, Candidature $candidature): View
-    {
+    public
+    function show(
+        Offre $offre,
+        Candidature $candidature
+    ): View {
         // Autoriser l'accès à la candidature en fonction des policies
         $this->authorize('view', $candidature);
 
