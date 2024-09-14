@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CandidatureController;
 use App\Http\Controllers\CompetenceController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\FormationController;
 use App\Http\Controllers\HomeController;
@@ -16,9 +17,9 @@ Route::get('home', [HomeController::class, 'index'])->name('home');
 Route::get('search', [HomeController::class, 'search'])->name('home.search');
 
 Route::get('mailable', function () {
-    $offre = App\Models\Offre::find(1);
+    $candidature = App\Models\Candidature::find(1);
 
-    return new App\Mail\OffreCreatedMail($offre);
+    return new App\Mail\CandidatureSubmittedMail($candidature, App\Models\Offre::find($candidature->offre_id));
 });
 
 Route::middleware('auth')->group(function () {
@@ -30,6 +31,8 @@ Route::middleware('auth')->group(function () {
             Route::resource('experience', ExperienceController::class);
             Route::resource('formation', FormationController::class);
         });
+
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::resource('offre', OffreController::class)->except('show');
 
