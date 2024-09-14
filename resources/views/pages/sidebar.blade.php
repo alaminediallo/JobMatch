@@ -53,24 +53,36 @@
         <div class="content-side content-side-full">
             <ul class="nav-main">
                 <li class="nav-main-item">
-                    <x-nav-link :href="route('home')" :active="request()->routeIs('home.*')" icon="home">
+                    <x-nav-link :href="route('home')"
+                                :active="request()->routeIs('home')"
+                                icon="home">
                         Home
                     </x-nav-link>
                 </li>
 
                 @auth
+                    <li class="nav-main-item">
+                        <x-nav-link :href="route('dashboard')"
+                                    :active="request()->routeIs('dashboard')"
+                                    icon="location-arrow">
+                            Dashboard
+                        </x-nav-link>
+                    </li>
+
                     @can('viewAny', App\Models\User::class)
                         <li class="nav-main-item">
-                            <x-nav-link :href="route('user.index')" :active="request()->routeIs('user.*')"
+                            <x-nav-link :href="route('user.index')"
+                                        :active="request()->routeIs('user.*')"
                                         icon="user">
-                                Utilisateur
+                                Utilisateurs
                             </x-nav-link>
                         </li>
                     @endcan
 
                     @can('viewAny', App\Models\Offre::class)
                         <li class="nav-main-item">
-                            <x-nav-link :href="route('offre.index')" :active="request()->routeIs('offre.*')"
+                            <x-nav-link :href="route('offre.index')"
+                                        :active="request()->routeIs('offre.*')"
                                         icon="briefcase">
                                 Offres
                             </x-nav-link>
@@ -79,7 +91,8 @@
 
                     @can('viewAllCandidatures', App\Models\Candidature::class)
                         <li class="nav-main-item">
-                            <x-nav-link :href="route('candidature.index')" :active="request()->routeIs('candidature.*')"
+                            <x-nav-link :href="route('candidature.index')"
+                                        :active="request()->routeIs('candidature.*')"
                                         icon="briefcase">
                                 Candidatures
                             </x-nav-link>
