@@ -30,7 +30,7 @@ class HomeController extends Controller
     private function getFilteredOffres(?string $searchTerm = null)
     {
         return Offre::with('category')
-//            ->validated()
+            ->validated()
             ->whereDate('date_debut', '<=', now())
             ->whereDate('date_fin', '>', now())
             ->when($searchTerm, function ($query, $searchTerm) {

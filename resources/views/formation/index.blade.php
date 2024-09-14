@@ -64,7 +64,7 @@
                                         <button type="submit"
                                                 onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette formation ?')"
                                                 class="btn btn-md btn-alt-danger">
-                                            <i class="fa fa-times"></i>
+                                            <i class="fa fa-trash-alt"></i>
                                         </button>
                                     </form>
                                 </div>

@@ -73,7 +73,7 @@
                                                 class="btn btn-md btn-alt-danger js-bs-tooltip-enabled"
                                                 data-bs-toggle="tooltip" aria-label="Supprimer"
                                                 data-bs-original-title="Supprimer">
-                                            <i class="fa fa-times"></i>
+                                            <i class="fa fa-trash-alt"></i>
                                         </button>
                                     </form>
                                 </div>

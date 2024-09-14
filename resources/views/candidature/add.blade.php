@@ -16,10 +16,10 @@
                 <!-- Informations de la candidature -->
                 <div class="block-content block-content-full pb-0">
                     <h2 class="content-heading">{{ __('Informations de la candidature') }}</h2>
-                    <div class="row ">
+                    <div class="row">
                         <div class="col-lg-3">
                             <p class="text-muted">
-                                {{ __('Veuillez remplir toutes les informations requises pour votre candidature') }}
+                                Veuillez fournir tous les documents nécessaires à votre candidature
                             </p>
                         </div>
                         <div class="col-lg-8 offset-lg-1">
@@ -59,7 +59,7 @@
                     <div class="row mt-3">
                         <div class="col-lg-6 offset-lg-4">
                             <button type="submit" class="btn btn-alt-primary">
-                                <i class="fa fa-paper-plane opacity-50 me-1"></i> {{ __('Envoyer la candidature') }}
+                                <i class="fa fa-paper-plane opacity-50 me-1"></i> Soumettre la candidature
                             </button>
                         </div>
                     </div>

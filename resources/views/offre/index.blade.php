@@ -1,5 +1,7 @@
 @extends('layouts.liste-datatable')
 
+@use("App\Enums\StatutOffre")
+
 @section('content')
 
     <div class="content">
@@ -93,14 +95,26 @@
                                             </form>
                                         </div>
                                     @else
-                                        @if($offre->candidatures_count <= 0)
+                                        @if($offre->candidatures_count <= 0 && $offre->statut !== StatutOffre::VALIDER)
                                             <a href="{{ route('offre.edit', $offre) }}"
                                                class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"
                                                data-bs-toggle="tooltip" aria-label="Modifier"
                                                data-bs-original-title="Modifier">
                                                 <i class="fa fa-pencil-alt"></i>
                                             </a>
-                                        @else
+                                            <form action="{{ route('offre.destroy', $offre) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        id="{{ $offre->candidatures_count ?? 'delete-button'}}"
+                                                        onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')"
+                                                        class="btn btn-md btn-alt-danger js-bs-tooltip-enabled"
+                                                        data-bs-toggle="tooltip" aria-label="Supprimer"
+                                                        data-bs-original-title="Supprimer">
+                                                    <i class="fa fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @elseif($offre->candidatures_count > 0)
                                             <a href="{{ route('offre.candidature.index', $offre) }}"
                                                class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
                                                data-bs-toggle="tooltip" aria-label="Voir les candidatures"
@@ -108,17 +122,6 @@
                                                 <i class="fa fa-users"></i>
                                             </a>
                                         @endif
-                                        <form action="{{ route('offre.destroy', $offre) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" id="delete-button"
-                                                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')"
-                                                    class="btn btn-md btn-alt-danger js-bs-tooltip-enabled"
-                                                    data-bs-toggle="tooltip" aria-label="Supprimer"
-                                                    data-bs-original-title="Supprimer">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </form>
                                     @endif
                                 </div>
                             </td>

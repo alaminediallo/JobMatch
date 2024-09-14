@@ -22,7 +22,15 @@
                                 Candidature de {{ $candidat->name }} {{ $candidat->prenom }}
                             </h1>
                             <h2 class="h4 fs-sm text-uppercase fw-semibold text-white-75 mb-2">
-                                Pour l'offre : {{ $offre->title }}
+                                Pour l'offre :
+                                @if($isRecruteur)
+                                    {{ $offre->title }}
+                                @else
+                                    <a class="fw-semibold text-primary-light"
+                                       href="{{ route('offre.show', $offre) }}">
+                                        {{ $offre->title }}
+                                    </a>
+                                @endif
                             </h2>
                             <h2 class="h4 fs-sm text-uppercase fw-semibold text-white-75">
                                 Reçue {{ $candidature->created_at->diffForHumans() }}
@@ -53,13 +61,35 @@
                             </div>
                         </div>
                     @else
-                        <!-- Affichage du statut pour le candidat -->
+                        <!-- Affichage du statut pour le candidat -->{{--
                         <div class="col-md-4 d-flex align-items-center justify-content-end">
-                            <div class="w-100 text-center text-md-start">
-                                <h2 class="h4 fs-sm text-uppercase fw-semibold text-white-75">
-                                    Statut : {{ Str::replace('_',' ',$candidature->statut->value) }}
+                            <div class="w-100 text-center text-md-start p-3 rounded bg-light shadow">
+                                <h2 class="h4 fs-sm text-uppercase fw-semibold text-dark mb-3">
+                                    Statut du Candidat
                                 </h2>
+                                <div class="badge
+                                    @if($candidature->statut === StatutCandidature::ACCEPTER) bg-success
+                                    @elseif($candidature->statut === StatutCandidature::ENTRETIEN_PLANIFIE) bg-primary
+                                    @elseif($candidature->statut === StatutCandidature::EN_COURS) bg-warning
+                                    @elseif($candidature->statut === StatutCandidature::REJETER) bg-danger
+                                    @else bg-warning @endif
+                                    p-3 fs-5">
+                                    {{ Str::replace('_',' ',$candidature->statut->value) }}
+                                </div>
                             </div>
+                        </div>--}}
+                        <div class="col-md-4 d-flex align-items-center">
+                            <a class="block block-rounded block-link-shadow block-transparent bg-black-50
+                        text-center mb-0 mx-auto">
+                                <div class="block-content block-content-full p-3 text-center">
+                                    <div class="fs-3 fw-semibold text-white mb-2">
+                                        Statut du candidat
+                                    </div>
+                                    <button class="btn btn-hero text-white {{ $candidature->statut->badgeClass() }}">
+                                        {{ Str::of($candidature->statut->value)->replace('_', ' ')->title() }}
+                                    </button>
+                                </div>
+                            </a>
                         </div>
                     @endif
                 </div>

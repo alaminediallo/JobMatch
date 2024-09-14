@@ -40,7 +40,6 @@
                         <th>Email</th>
                         <th>Role</th>
                         <th>Statut</th>
-                        {{--                        <th style="width: 35%">Utilisateur</th>--}}
                         <th style="width: 15%;">Action</th>
                     </tr>
                     </thead>
@@ -68,7 +67,7 @@
                             <td class="text-center">
                                 <div class="btn-group">
                                     <a href="{{ route('user.edit', $user) }}"
-                                       type="button" class="btn btn-md btn-alt-secondary js-bs-tooltip-enabled"
+                                       type="button" class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
                                        data-bs-toggle="tooltip" aria-label="Modifier"
                                        data-bs-original-title="Modifier" data-bs-placement="top">
                                         <i class="fa fa-pencil-alt"></i>
@@ -78,10 +77,10 @@
                                         <form action="{{ route('user.deactivate', $user) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
-                                            <a href="#" type="button" onclick="event.preventDefault();
+                                            <a href="" type="button" id="delete-button" onclick="event.preventDefault();
                                             if(confirm('Êtes-vous sûr de vouloir bloquer cet utilisateur ?')){
                                             this.closest('form').submit();}"
-                                               class="btn btn-md btn-alt-info js-bs-tooltip-enabled"
+                                               class="btn btn-md btn-alt-danger js-bs-tooltip-enabled"
                                                data-bs-toggle="tooltip" aria-label="Bloquer"
                                                data-bs-original-title="Bloquer" data-bs-placement="top">
                                                 <i class="fa fa-ban"></i>
@@ -91,13 +90,13 @@
                                         <form action="{{ route('user.activate', $user) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
-                                            <a href="#" type="button" onclick="event.preventDefault();
+                                            <a href="#" type="button" id="delete-button" onclick="event.preventDefault();
                                             if(confirm('Êtes-vous sûr de vouloir activer cet utilisateur ?')){
                                             this.closest('form').submit();}"
                                                class="btn btn-md btn-alt-warning js-bs-tooltip-enabled"
                                                data-bs-toggle="tooltip" aria-label="Activer"
                                                data-bs-original-title="Activer" data-bs-placement="top">
-                                                <i class="fa fa-thumbs-up"></i>
+                                                <i class="fa fa-thumbs-down"></i>
                                             </a>
                                         </form>
                                     @endif
